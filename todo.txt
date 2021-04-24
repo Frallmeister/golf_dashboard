@@ -1,0 +1,23 @@
+Header cards
+- Number of shots
+- Most shots club
+- Fewest shots club
+- Biggest variance
+- Smallest variance
+- Longest shot
+
+Distplot
+
+Ridgeplot / Boxplot
+
+bubbel plot
+
+Progress over time (Median and stddev)
+
+Line plot with Median, Mean and stddev
+
+Show distance in total or carry
+
+Detailed view for each club
+
+Log data
