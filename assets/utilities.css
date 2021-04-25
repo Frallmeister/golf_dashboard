@@ -1,0 +1,35 @@
+.container {
+    /* max-width: 1400px; */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.flex {
+    display: flex;
+    /* flex-wrap: wrap; */
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.card {
+    background-color: var(--card-color);
+    border-radius: 2px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    padding: 10px 20px;
+    width: 100%;
+    align-items: center;
+}
