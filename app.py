@@ -4,6 +4,8 @@ import datetime
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table
+from dash.dependencies import Input, Output
 import plotly.express as px
 import plotly.figure_factory as ff
 import pandas as pd
@@ -12,6 +14,7 @@ import sqlalchemy as db
 from models import Shots
 
 from utils import *
+from graphs import *
 
 db_pw = os.environ.get('MYSQLPW')
 db_uri = f"mysql+pymysql://root:{db_pw}@localhost:3306/golf_progress"
@@ -29,6 +32,7 @@ df = pd.read_sql_table(
 
 # Instantiate Dash app
 app = dash.Dash(__name__)
+app.title = "My Golf Progress"
 
 app.layout = html.Div(children=[
 
@@ -42,8 +46,8 @@ app.layout = html.Div(children=[
         html.Div(className="nav-header", children=[html.H1("My Golf Progress")]),       
         html.Nav(className="navitems", children=[
             html.Ul(className="flex", children=[
-                html.Li([html.P("Page1")]),
-                html.Li([html.P("Page2")]),
+                html.Li([html.P("Club details")]),
+                html.Li([html.P("Log shots")]),
                 html.Li([html.P("Page3")]),
             ])
         ])
@@ -79,10 +83,26 @@ app.layout = html.Div(children=[
         ])
     ]),
 
-    html.Div(className="container grid grid-6", children=[
-        html.Div(className="dist-plots card", children=[
-            html.H3("Length distribution"),
-            html.P("Some graph here")
+    ###### MAIN
+    html.Div(className="container main", children=[
+        html.Div(className="grid grid-6", children=[
+            html.Div(className="left-top", children=[
+                html.Div(className="controls card", children=[
+                    html.H3("Controls"),
+                    html.P("Mean/Median"),
+                    html.P("Total distance/Carry distance"),
+                ]),
+            ]),
+            html.Div(className="dist-plots card", children=[
+                html.H3("Length distribution"),
+                dcc.Graph(figure=dist_plot(df, d=0))
+            ])
+        ]),
+        html.Div(className="table grid", children=[
+            html.Div(className="card", children=[
+                html.H3("Statistics"),
+                html.Div(create_table(df))
+            ]),
         ])
     ])
 

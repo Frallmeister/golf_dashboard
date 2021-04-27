@@ -12,6 +12,7 @@ Ridgeplot / Boxplot
 
 bubbel plot
 
+
 Progress over time (Median and stddev)
 
 Line plot with Median, Mean and stddev

@@ -2,6 +2,7 @@ import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table
 
 club_enum = {
     '1W': '1 Wood',
@@ -87,3 +88,22 @@ def smallest_var(df, d=0):
         html.H3(club_enum[club]),
         html.H3(f"\u03C3 = {num:.2f}", style={'color': '#0034B8'})
     ])
+
+def create_table(df, d=0):
+    distance = 'total_distance' if d==0 else 'carry_distance'
+    table_df = df.groupby('club').describe()[distance].reset_index().round(decimals=2)
+    table_df = table_df.astype({'mean': int, '25%': int, '50%': int, '75%': int})
+
+    return dash_table.DataTable(
+        id = "stat-table",
+        columns = [{'name': i.capitalize(), 'id': i} for i in table_df.columns],
+        data = table_df.to_dict("records"),
+        style_cell = {'textAlign': 'center'},
+        style_header = {
+            'fontWeight': 'bold',
+            'padding': '5px',
+            'backgroundColor': '#444444',
+            'color': '#ffffff'
+            },
+        style_as_list_view=True,
+    )
