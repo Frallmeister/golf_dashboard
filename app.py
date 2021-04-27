@@ -88,9 +88,38 @@ app.layout = html.Div(children=[
         html.Div(className="grid grid-6", children=[
             html.Div(className="left-top", children=[
                 html.Div(className="controls card", children=[
+                    
                     html.H3("Controls"),
-                    html.P("Mean/Median"),
-                    html.P("Total distance/Carry distance"),
+                    # Mean/Median
+                    html.Div(className="radio-group", children=[
+                        dcc.RadioItems(
+                            id='radio-mean-median',
+                            options=[
+                                {'label': 'Median', 'value': 'median'},
+                                {'label': 'Mean', 'value': 'mean'},
+                            ],
+                            value='median',
+                            labelStyle={'display': 'inline-block'}
+                        ) 
+                    ]),
+                    # html.Hr(),
+
+                    # Mean/Median
+                    html.Div(className="radio-group", children=[
+                        dcc.RadioItems(
+                            id='radio-total-carry',
+                            options=[
+                                {'label': 'Total distance', 'value': 'total'},
+                                {'label': 'Carry distance', 'value': 'carry'},
+                            ],
+                            value='total',
+                            labelStyle={'display': 'inline-block'}
+                        ) 
+                    ]),
+                ]),
+                html.Div(className="table card", children=[
+                    html.H3("Statistics"),
+                    html.Div(create_table(df))
                 ]),
             ]),
             html.Div(className="dist-plots card", children=[
@@ -98,16 +127,13 @@ app.layout = html.Div(children=[
                 dcc.Graph(figure=dist_plot(df, d=0))
             ])
         ]),
-        html.Div(className="table grid", children=[
-            html.Div(className="card", children=[
-                html.H3("Statistics"),
-                html.Div(create_table(df))
-            ]),
-        ])
     ])
-
-
 ])
+
+
+
+""" Callback functions below """
+
 
 
 if __name__ == '__main__':

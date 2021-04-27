@@ -74,9 +74,18 @@ ul {
 .controls {
     margin-bottom: 15px;
 }
+
+.controls .radio-group label {
+    margin-right: 20px;
+}
+
+.controls .radio-group {
+    margin-bottom: 20px;
+}
+
 .table {
-    margin-bottom: 15px;
-    grid-template-columns: repeat(3, 1fr);
+    /* margin-bottom: 15px;
+    grid-template-columns: repeat(3, 1fr); */
 }
 
 /* DIST-PLOTS */

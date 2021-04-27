@@ -96,8 +96,9 @@ def create_table(df, d=0):
 
     return dash_table.DataTable(
         id = "stat-table",
-        columns = [{'name': i.capitalize(), 'id': i} for i in table_df.columns],
+        columns = [{'name': i.capitalize(), 'id': i, 'deletable': False} for i in table_df.columns],
         data = table_df.to_dict("records"),
+        sort_action='native',
         style_cell = {'textAlign': 'center'},
         style_header = {
             'fontWeight': 'bold',
