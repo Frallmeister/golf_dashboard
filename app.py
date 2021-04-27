@@ -102,8 +102,6 @@ app.layout = html.Div(children=[
                             labelStyle={'display': 'inline-block'}
                         ) 
                     ]),
-                    # html.Hr(),
-
                     # Mean/Median
                     html.Div(className="radio-group", children=[
                         dcc.RadioItems(
@@ -124,7 +122,17 @@ app.layout = html.Div(children=[
             ]),
             html.Div(className="dist-plots card", children=[
                 html.H3("Length distribution"),
-                dcc.Graph(figure=dist_plot(df, d=0))
+                html.Div(id="dist-plot"),
+                dcc.RangeSlider(
+                    id='dist-plot-range',
+                    marks={i: f"{i} m" for i in range(min(0, int(df.carry_distance.min()-20)), int(df.total_distance.max()+60), 50)},
+                    value=[max(0, int(df.carry_distance.min()-10)), int(df.total_distance.max()+10)],
+                    step=10,
+                    min=0,
+                    max=df.total_distance.max()+20,
+                ),
+                html.Div(id="dummy"),
+
             ])
         ]),
     ])
@@ -133,6 +141,21 @@ app.layout = html.Div(children=[
 
 
 """ Callback functions below """
+@app.callback(
+    Output('dist-plot', 'children'),
+    Input('radio-total-carry', 'value'),
+    Input('dist-plot-range', 'value'))
+def plot_distribution(distance, range):
+    fig = my_dist_plot(df, distance=distance, range=range)
+    return dcc.Graph(figure=fig)
+
+@app.callback(
+    Output('dummy', 'children'),
+    Input('dist-plot-range', 'value'))
+def output_dummy(val):
+    a, b = val
+    return f"Showing range {a} - {b} m"
+
 
 
 

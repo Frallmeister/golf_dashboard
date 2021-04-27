@@ -88,6 +88,10 @@ ul {
     grid-template-columns: repeat(3, 1fr); */
 }
 
+#stat-table {
+    margin-bottom: 15px;
+}
+
 /* DIST-PLOTS */
 .dist-plots {
     grid-column: 3 / span 4;
