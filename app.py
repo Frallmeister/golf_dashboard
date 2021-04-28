@@ -131,7 +131,16 @@ app.layout = html.Div(children=[
                     min=0,
                     max=df.total_distance.max()+20,
                 ),
-                html.Div(id="dummy"),
+                html.Div(className="flex dist-plot-bottom", children=[
+                    html.Div(id="slider-range-text"),
+                    html.Div(
+                        dcc.Checklist(
+                            id="show-bars-option",
+                            options=[{"label": "Show bars", "value": 'show'}],
+                            value=[]
+                        )
+                    ),
+                ])
 
             ])
         ]),
@@ -144,13 +153,15 @@ app.layout = html.Div(children=[
 @app.callback(
     Output('dist-plot', 'children'),
     Input('radio-total-carry', 'value'),
-    Input('dist-plot-range', 'value'))
-def plot_distribution(distance, range):
-    fig = my_dist_plot(df, distance=distance, range=range)
+    Input('dist-plot-range', 'value'),
+    Input('show-bars-option', 'value'))
+def plot_distribution(distance, range, show):
+    show_hist = True if show else False
+    fig = my_dist_plot(df, distance=distance, range=range, show_hist=show_hist)
     return dcc.Graph(figure=fig)
 
 @app.callback(
-    Output('dummy', 'children'),
+    Output('slider-range-text', 'children'),
     Input('dist-plot-range', 'value'))
 def output_dummy(val):
     a, b = val
