@@ -31,10 +31,11 @@ df = pd.read_sql_table(
 
 
 # Instantiate Dash app
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
 app.title = "My Golf Progress"
 
 app.layout = html.Div(children=[
+    dcc.Location(id='url', refresh=False),
 
     ###### NAVBAR
     html.Div(className="navbar flex", children=[
@@ -43,16 +44,24 @@ app.layout = html.Div(children=[
                 html.Img(src=app.get_asset_url('dash-logo.jpeg'), height='50px'),
             ])
         ]),
-        html.Div(className="nav-header", children=[html.H1("My Golf Progress")]),       
+        html.Div(className="nav-header", children=[
+            html.A(href="/", children=[
+                html.H1("My Golf Progress")
+            ])
+        ]),
         html.Nav(className="navitems", children=[
             html.Ul(className="flex", children=[
-                html.Li([html.P("Club details")]),
-                html.Li([html.P("Log shots")]),
+                html.Li([dcc.Link("Club details", id="club_details_id", href="/club-details")]),
+                html.Li([dcc.Link("Log data", id="log_data_id", href="/log-data")]),
                 html.Li([html.P("Page3")]),
             ])
         ])
     ]),
 
+    html.Div(id="page-content")
+])
+
+home_layout = html.Div([
     ###### HEADER
     html.Div(className="container", children=[
         html.Div(className="grid grid-6 header", children=[
@@ -142,9 +151,6 @@ app.layout = html.Div(children=[
 
 
 """ Callback functions below """
-
-
-
 @app.callback(
     Output('table_id', 'children'),
     Input('table-total-carry', 'value'))
@@ -194,6 +200,12 @@ def print_range(val):
 
 
 """ Helper functions """
+@app.callback(
+    Output('page-content', 'children'),
+    Input('url', 'pathname'))
+def display_page(pathname):
+    print(pathname)
+    return home_layout
 
 
 if __name__ == '__main__':

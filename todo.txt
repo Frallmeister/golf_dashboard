@@ -12,6 +12,9 @@ Line plot with Median, Mean and stddev
 Detailed view for each club
 
 Log data
+- Log by uploading a csv file
+
+Download data in excel sheet or csv
 
 Difference between total and carry distance
 
