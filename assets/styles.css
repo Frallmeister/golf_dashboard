@@ -18,7 +18,9 @@ body {
 
 a {
     text-decoration: none;
+    color: #000;
 }
+
 
 ul {
     list-style-type: none;
@@ -43,8 +45,22 @@ ul {
     color: #333;
 }
 
+.navitems {
+    /* height: 100%; */
+}
+
+.navitems ul {
+    /* height: 100%; */
+    padding: 20px 0;
+}
+
 .navitems li {
     margin-left: 30px;
+    vertical-align: middle;
+}
+
+.navitems li a {
+    height: 100%;
 }
 
 /* HEADER */

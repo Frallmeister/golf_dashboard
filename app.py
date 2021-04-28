@@ -61,6 +61,7 @@ app.layout = html.Div(children=[
     html.Div(id="page-content")
 ])
 
+# LAYOUT: Home
 home_layout = html.Div([
     ###### HEADER
     html.Div(className="container", children=[
@@ -184,9 +185,9 @@ def slider_config(distance):
     dff = df[['total_distance', 'carry_distance']].describe()
     min_ = dff.loc['min',:].min()
     max_ = dff.loc['max',:].max()
-    marks = {i: f"{i} m" for i in range(max(0, int(min_ - 25)), int(max_ + 26), 25)}
+    marks = {i: f"{i} m" for i in range(0, 25*int(max_/25) + 26, 25)}
     value = [max(0, int(min_ - 10)), int(max_ + 10)]
-
+    max_ = 25*int(max_/25)+25
     return marks, value, max_
 
 @app.callback(
