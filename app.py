@@ -90,7 +90,7 @@ app.layout = html.Div(children=[
                 html.Div(className="controls card", children=[
                     
                     html.H3("Controls"),
-                    # Mean/Median
+                    # Controls: Mean/Median
                     html.Div(className="radio-group", children=[
                         dcc.RadioItems(
                             id='radio-mean-median',
@@ -102,7 +102,7 @@ app.layout = html.Div(children=[
                             labelStyle={'display': 'inline-block'}
                         ) 
                     ]),
-                    # Mean/Median
+                    # Controls: Distance type
                     html.Div(className="radio-group", children=[
                         dcc.RadioItems(
                             id='radio-total-carry',
@@ -115,22 +115,22 @@ app.layout = html.Div(children=[
                         ) 
                     ]),
                 ]),
+                # Table
                 html.Div(className="table card", children=[
                     html.H3("Statistics"),
                     html.Div(create_table(df))
                 ]),
             ]),
+            # DIST PLOT
             html.Div(className="dist-plots card", children=[
                 html.H3("Length distribution"),
-                html.Div(id="dist-plot"),
+                html.Div(id="dist-plot"), # <--- Plot div
                 dcc.RangeSlider(
                     id='dist-plot-range',
-                    marks={i: f"{i} m" for i in range(min(0, int(df.carry_distance.min()-20)), int(df.total_distance.max()+60), 50)},
-                    value=[max(0, int(df.carry_distance.min()-10)), int(df.total_distance.max()+10)],
                     step=10,
                     min=0,
-                    max=df.total_distance.max()+20,
                 ),
+                # Options below plot
                 html.Div(className="flex dist-plot-bottom", children=[
                     html.Div(id="slider-range-text"),
                     html.Div(
@@ -140,6 +140,17 @@ app.layout = html.Div(children=[
                             value=[]
                         )
                     ),
+                    html.Div(
+                        dcc.RadioItems(
+                            id='dist-total-carry-option',
+                            options=[
+                                {'label': 'Total distance', 'value': 'total'},
+                                {'label': 'Carry distance', 'value': 'carry'},
+                            ],
+                            value='total',
+                            labelStyle={'display': 'block'}
+                        ) 
+                    )
                 ])
 
             ])
@@ -152,22 +163,45 @@ app.layout = html.Div(children=[
 """ Callback functions below """
 @app.callback(
     Output('dist-plot', 'children'),
-    Input('radio-total-carry', 'value'),
+    Input('dist-total-carry-option', 'value'),
     Input('dist-plot-range', 'value'),
     Input('show-bars-option', 'value'))
 def plot_distribution(distance, range, show):
+    """
+    Plot the distribution plot in the upper right part of the dashboard.
+    """
     show_hist = True if show else False
-    fig = my_dist_plot(df, distance=distance, range=range, show_hist=show_hist)
+    fig = my_dist_plot(df, range=range, distance=distance, show_hist=show_hist)
     return dcc.Graph(figure=fig)
+
+
+@app.callback(
+    Output('dist-plot-range', 'marks'),
+    Output('dist-plot-range', 'value'),
+    Output('dist-plot-range', 'max'),
+    Input('dist-total-carry-option', 'value'))
+def slider_config(distance):
+    """
+    """
+    dff = df[['total_distance', 'carry_distance']].describe()
+    min_ = dff.loc['min',:].min()
+    max_ = dff.loc['max',:].max()
+    marks = {i: f"{i} m" for i in range(max(0, int(min_ - 25)), int(max_ + 26), 25)}
+    value = [max(0, int(min_ - 10)), int(max_ + 10)]
+
+    return marks, value, max_
 
 @app.callback(
     Output('slider-range-text', 'children'),
     Input('dist-plot-range', 'value'))
-def output_dummy(val):
+def print_range(val):
+    """
+    """
     a, b = val
-    return f"Showing range {a} - {b} m"
+    return f"Selected range {a}-{b} m"
 
 
+""" Helper functions """
 
 
 if __name__ == '__main__':

@@ -98,7 +98,12 @@ ul {
     margin: 15px 0;
 }
 
-.dist-plots .dist-plot-bottom > div{
+.dist-plots .dist-plot-bottom > div {
     margin-right: 30px;
     margin-top: 30px;
+}
+
+.dist-plots .dist-plot-bottom div > label {
+    margin-right: 10px;
+    /* margin-top: 30px; */
 }
