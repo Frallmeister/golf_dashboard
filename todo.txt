@@ -1,12 +1,4 @@
-Header cards
-- Number of shots
-- Most shots club
-- Fewest shots club
-- Biggest variance
-- Smallest variance
-- Longest shot
 
-Distplot
 
 Ridgeplot / Boxplot
 
@@ -17,8 +9,22 @@ Progress over time (Median and stddev)
 
 Line plot with Median, Mean and stddev
 
-Show distance in total or carry
-
 Detailed view for each club
 
 Log data
+
+Difference between total and carry distance
+
+Correction for range vs golf course
+
+==== IMPROVEMENTS ====
+Distplot: better graph style
+
+==== COMPLETED ====
+Header cards
+- Number of shots
+- Most shots club
+- Fewest shots club
+- Biggest variance
+- Smallest variance
+- Longest shot

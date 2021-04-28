@@ -65,15 +65,14 @@ ul {
     border-bottom: 1px #ccc solid;
 }
 
-.left-top {
+/* TABLE */
+.stat-table {
     grid-column: 1 / span 2;
     margin: 15px 0;
 }
 
-/* TABLE */
-.table {
-    /* margin-bottom: 15px;
-    grid-template-columns: repeat(3, 1fr); */
+#table-total-carry > label {
+    margin-right: 10px;
 }
 
 #stat-table {

@@ -86,11 +86,20 @@ app.layout = html.Div(children=[
     ###### MAIN
     html.Div(className="container main", children=[
         html.Div(className="grid grid-6", children=[
-            html.Div(className="left-top", children=[
+            html.Div(className="stat-table", children=[
                 # Table
                 html.Div(className="table card", children=[
                     html.H3("Statistics"),
-                    html.Div(create_table(df))
+                    html.Div(id="table_id"),
+                    dcc.RadioItems(
+                        id="table-total-carry",
+                        options=[
+                            {'label': 'Total distance', 'value': 'total'},
+                            {'label': 'Carry distance', 'value': 'carry'},
+                        ],
+                        value='total',
+                        labelStyle={'display': 'inline-block'}
+                    )
                 ]),
             ]),
             # DIST PLOT
@@ -133,6 +142,17 @@ app.layout = html.Div(children=[
 
 
 """ Callback functions below """
+
+
+
+@app.callback(
+    Output('table_id', 'children'),
+    Input('table-total-carry', 'value'))
+def table_component(distance):
+    distance += "_distance"
+    table = create_table(df, distance=distance)
+    return table
+
 @app.callback(
     Output('dist-plot', 'children'),
     Input('dist-total-carry-option', 'value'),

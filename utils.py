@@ -89,8 +89,7 @@ def smallest_var(df, d=0):
         html.H3(f"\u03C3 = {num:.2f}", style={'color': '#0034B8'})
     ])
 
-def create_table(df, d=0):
-    distance = 'total_distance' if d==0 else 'carry_distance'
+def create_table(df, distance='total_distance'):
     table_df = df.groupby('club').describe()[distance].reset_index().round(decimals=2)
     table_df = table_df.astype({'mean': int, '25%': int, '50%': int, '75%': int})
 
