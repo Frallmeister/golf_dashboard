@@ -87,34 +87,6 @@ app.layout = html.Div(children=[
     html.Div(className="container main", children=[
         html.Div(className="grid grid-6", children=[
             html.Div(className="left-top", children=[
-                html.Div(className="controls card", children=[
-                    
-                    html.H3("Controls"),
-                    # Controls: Mean/Median
-                    html.Div(className="radio-group", children=[
-                        dcc.RadioItems(
-                            id='radio-mean-median',
-                            options=[
-                                {'label': 'Median', 'value': 'median'},
-                                {'label': 'Mean', 'value': 'mean'},
-                            ],
-                            value='median',
-                            labelStyle={'display': 'inline-block'}
-                        ) 
-                    ]),
-                    # Controls: Distance type
-                    html.Div(className="radio-group", children=[
-                        dcc.RadioItems(
-                            id='radio-total-carry',
-                            options=[
-                                {'label': 'Total distance', 'value': 'total'},
-                                {'label': 'Carry distance', 'value': 'carry'},
-                            ],
-                            value='total',
-                            labelStyle={'display': 'inline-block'}
-                        ) 
-                    ]),
-                ]),
                 # Table
                 html.Div(className="table card", children=[
                     html.H3("Statistics"),
