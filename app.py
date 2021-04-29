@@ -1,11 +1,14 @@
 import os
 import datetime
+import base64
+import datetime
+import io
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import plotly.express as px
 import plotly.figure_factory as ff
 import pandas as pd
@@ -152,7 +155,30 @@ home_layout = html.Div([
 
 # LAYOUT: Data
 data_layout = html.Div([
-    html.H3("Data page")
+    html.Div(className="container data-upload", children=[
+        html.H3("Data page"),
+        dcc.Upload(
+            id="data_upload_id",
+            children=html.Div([
+                'Drag and Drop or ',
+                html.A(className="upload_link", children=['Select Files'])
+            ]),
+            style={
+                'width': '100%',
+                'height': '60px',
+                'lineHeight': '60px',
+                'borderWidth': '1px',
+                'borderStyle': 'dashed',
+                'borderRadius': '5px',
+                'textAlign': 'center',
+                'margin': '10px auto'
+            },
+            # Allow multiple files to be uploaded
+            multiple=True,
+        ),
+
+        html.Div(id="output-data-upload")
+    ])
 ])
 
 
@@ -164,7 +190,9 @@ details_layout = html.Div([
 
 
 
-""" Callback functions below """
+"""
+CALLBACK: Home page
+"""
 @app.callback(
     Output('table_id', 'children'),
     Input('table-total-carry', 'value'))
@@ -211,6 +239,21 @@ def print_range(val):
     """
     a, b = val
     return f"Selected range {a}-{b} m"
+
+
+"""
+CALLBACK: Data page
+"""
+@app.callback(Output('output-data-upload', 'children'),
+              Input('data_upload_id', 'contents'),
+              State('data_upload_id', 'filename'),
+              State('data_upload_id', 'last_modified'))
+def update_output(list_of_contents, list_of_names, list_of_dates):
+
+    if list_of_contents is not None:
+        children = [parse_file_upload(contents, filename, engine, session) for contents, filename in zip(list_of_contents, list_of_names)]
+        return children
+            
 
 
 """ Helper functions """

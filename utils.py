@@ -1,3 +1,8 @@
+import base64
+import datetime
+import io
+import csv
+
 import pandas as pd
 import dash
 import dash_core_components as dcc
@@ -107,3 +112,69 @@ def create_table(df, distance='total_distance'):
             },
         style_as_list_view=True,
     )
+
+
+def parse_file_upload(contents, filename, engine, session):
+
+    content_type, content_string = contents.split(',')
+    decoded = base64.b64decode(content_string)
+
+    # Only accept csv and xls files
+    if filename.split('.')[-1] == 'csv':
+        pass
+    elif 'xls' in filename.split('.')[-1]:
+        pass
+    else:
+        return html.Div(
+            "Only csv or Excel files are accepted",
+            className="upload-error-message",
+            )
+
+    # Check that the file have the expected columns
+    list_content = decoded.decode('utf-8').split('\n')
+    column_names = list_content[0].strip()
+    expected_columns = ['club', 'total_distance', 'carry_distance', 'missed', 'date']
+    if not all([column in column_names for column in expected_columns]):
+        return html.Div(
+            f"The file did not have the expected column names",
+            className="upload-error-message",
+            )
+
+    # Create table with data to display
+    try:
+        if filename.split('.')[-1] == 'csv':
+            # Assume that the user uploaded a CSV file
+            dff = pd.read_csv(
+                io.StringIO(decoded.decode('utf-8')))
+
+        elif 'xls' in filename.split('.')[-1]:
+            # Assume that the user uploaded an excel file
+            dff = pd.read_excel(io.BytesIO(decoded))
+
+    except Exception as e:
+        print(e)
+        return html.Div([
+            'There was an error processing this file.'
+        ])
+    
+
+    print(engine)
+    print(session)
+
+    return html.Div(className="table card", children=[
+        dash_table.DataTable(
+            id="upload_table_id",
+            data = dff.to_dict('records'),
+            columns = [{'name': i.capitalize(), 'id': i, 'deletable': False} for i in dff.columns],
+            sort_action='native',
+            style_cell = {'textAlign': 'center'},
+            style_header = {
+                'textAlign': 'center',
+                'fontWeight': 'bold',
+                'padding': '5px',
+                'backgroundColor': '#444444',
+                'color': '#ffffff'
+                },
+            style_as_list_view=True,
+        )
+    ])
