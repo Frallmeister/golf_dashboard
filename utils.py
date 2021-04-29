@@ -8,6 +8,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+from models import Shots
 
 club_enum = {
     '1W': '1 Wood',
@@ -122,11 +123,12 @@ def parse_file_upload(contents, filename, engine, session):
     # Only accept csv and xls files
     if filename.split('.')[-1] == 'csv':
         pass
-    elif 'xls' in filename.split('.')[-1]:
+    elif 'xls' in filename.split('.')[-1] and False:
+        # Excel not supported yet
         pass
     else:
         return html.Div(
-            "Only csv or Excel files are accepted",
+            "Only csv are accepted",
             className="upload-error-message",
             )
 
@@ -134,9 +136,11 @@ def parse_file_upload(contents, filename, engine, session):
     list_content = decoded.decode('utf-8').split('\n')
     column_names = list_content[0].strip()
     expected_columns = ['club', 'total_distance', 'carry_distance', 'missed', 'date']
-    if not all([column in column_names for column in expected_columns]):
+    if not all([column in column_names for column in expected_columns]) or len(column_names.split(','))!=5:
+        print([column in column_names for column in expected_columns])
+        print(column_names.split(','))
         return html.Div(
-            f"The file did not have the expected column names",
+            f"The file did not have the expected columns",
             className="upload-error-message",
             )
 
@@ -153,19 +157,37 @@ def parse_file_upload(contents, filename, engine, session):
 
     except Exception as e:
         print(e)
-        return html.Div([
-            'There was an error processing this file.'
-        ])
+        return html.Div(
+            'There was an error processing this file',
+            className="upload-error-message"
+            )
     
 
     print(engine)
     print(session)
 
+    col_dict = dict(enumerate(column_names.split(',')))
+    for row in decoded.decode('utf-8').split('\n')[1:]:
+        cells = row.strip().split(',')
+        entry = {col_dict[i]:cells[i] for i in range(5)}
+
+        # Create new record
+        new_shot = Shots(
+            club = str(entry['club']),
+            total_distance = int(entry['total_distance']),
+            carry_distance = int(entry['carry_distance']),
+            missed = bool(int(entry['missed'])),
+            date = datetime.datetime.strptime(entry['date'], '%Y-%m-%d'),
+        )
+        session.add(new_shot)
+    session.commit()
+
+
     return html.Div(className="table card", children=[
         dash_table.DataTable(
             id="upload_table_id",
             data = dff.to_dict('records'),
-            columns = [{'name': i.capitalize(), 'id': i, 'deletable': False} for i in dff.columns],
+            columns = [{'name': i.capitalize().replace('_', ' '), 'id': i, 'deletable': False} for i in dff.columns],
             sort_action='native',
             style_cell = {'textAlign': 'center'},
             style_header = {
