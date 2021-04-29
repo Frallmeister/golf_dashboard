@@ -51,12 +51,18 @@ ul {
 
 .navitems ul {
     /* height: 100%; */
-    padding: 20px 0;
+    /* padding: 0px 0; */
 }
 
 .navitems li {
-    margin-left: 30px;
+    margin: 0 15px;
     vertical-align: middle;
+    padding: 10px 0;
+}
+
+.navitems li:hover {
+    border-bottom: 3px rgb(255, 123, 0) solid;
+    padding-bottom: 3px;
 }
 
 .navitems li a {

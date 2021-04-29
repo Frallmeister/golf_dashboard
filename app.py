@@ -51,9 +51,9 @@ app.layout = html.Div(children=[
         ]),
         html.Nav(className="navitems", children=[
             html.Ul(className="flex", children=[
+                html.Li([dcc.Link("Home", id="home_id", href="/")]),
                 html.Li([dcc.Link("Club details", id="club_details_id", href="/club-details")]),
-                html.Li([dcc.Link("Log data", id="log_data_id", href="/log-data")]),
-                html.Li([html.P("Page3")]),
+                html.Li([dcc.Link("Data", id="data_id", href="/data")]),
             ])
         ])
     ]),
@@ -150,6 +150,19 @@ home_layout = html.Div([
 ])
 
 
+# LAYOUT: Data
+data_layout = html.Div([
+    html.H3("Data page")
+])
+
+
+# LAYOUT: Club details
+details_layout = html.Div([
+    html.H3("Club details")
+    # Tabs and stuff here
+])
+
+
 
 """ Callback functions below """
 @app.callback(
@@ -205,8 +218,14 @@ def print_range(val):
     Output('page-content', 'children'),
     Input('url', 'pathname'))
 def display_page(pathname):
-    print(pathname)
-    return home_layout
+    if pathname == "/":
+        return home_layout
+    elif pathname == "/home":
+        return home_layout
+    elif pathname == "/data":
+        return data_layout
+    elif pathname == "/club-details":
+        return details_layout
 
 
 if __name__ == '__main__':
