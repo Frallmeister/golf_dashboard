@@ -157,6 +157,8 @@ home_layout = html.Div([
 data_layout = html.Div([
     html.Div(className="container data-upload", children=[
         html.H3("Data page"),
+        html.Button("Download PDF", id="download_btn_id"),
+        dcc.Download(id='download_id'),
         dcc.Upload(
             id="data_upload_id",
             children=html.Div([
@@ -244,6 +246,13 @@ def print_range(val):
 """
 CALLBACK: Data page
 """
+@app.callback(Output('download_id', 'data'),
+              Input('download_btn_id', 'n_clicks'),
+              prevent_initial_call=True)
+def download_pdf(n_clicks):
+    return dcc.send_file("./assets/files/golf_logg.pdf")
+
+
 @app.callback(Output('output-data-upload', 'children'),
               Input('data_upload_id', 'contents'),
               State('data_upload_id', 'filename'),

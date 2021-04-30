@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
 
 :root {
     --card-color: #fff;
@@ -13,6 +13,7 @@
 body {
     background-color: #eee;
     font-family: 'Lato', sans-serif;
+    /* font-family: 'Abel', sans-serif; */
     line-height: 1.6;
 }
 
@@ -81,7 +82,7 @@ ul {
     margin: 20px 0;
 }
 
-.main h3 {
+.main .card h3 {
     margin-bottom: 10px;
     color: #666;
     border-bottom: 1px #ccc solid;
@@ -132,4 +133,16 @@ ul {
     color: #DC2700;
     font-weight: bold;
     text-align: center;
+}
+
+#download_btn_id {
+    padding: 10px 20px;
+    background-color: var(--card-color);
+    border-radius: 5px;
+    border: 1px #888 solid;
+}
+
+#download_btn_id:hover {
+    transform: scale(0.99);
+    border-color: #333;
 }

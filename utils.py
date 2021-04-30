@@ -163,9 +163,6 @@ def parse_file_upload(contents, filename, engine, session):
             )
     
 
-    print(engine)
-    print(session)
-
     col_dict = dict(enumerate(column_names.split(',')))
     for row in decoded.decode('utf-8').split('\n')[1:]:
         cells = row.strip().split(',')
@@ -184,6 +181,7 @@ def parse_file_upload(contents, filename, engine, session):
 
 
     return html.Div(className="table card", children=[
+        html.Div("The following data was uploaded"),
         dash_table.DataTable(
             id="upload_table_id",
             data = dff.to_dict('records'),
