@@ -22,6 +22,10 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
+.grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
 .grid-6 {
     grid-template-columns: repeat(6, 1fr);
 }
@@ -33,4 +37,17 @@
     padding: 10px 20px;
     width: 100%;
     align-items: center;
+}
+
+.btn {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: var(--card-color);
+    border-radius: 5px;
+    border: 2px #888 solid;
+}
+
+.btn:hover {
+    transform: scale(0.99);
+    border-color: #333;
 }

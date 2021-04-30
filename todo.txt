@@ -20,6 +20,8 @@ Difference between total and carry distance
 
 Correction for range vs golf course
 
+Add color themes
+
 ==== IMPROVEMENTS ====
 Distplot: better graph style
 

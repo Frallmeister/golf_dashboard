@@ -2,6 +2,9 @@
 
 :root {
     --card-color: #fff;
+    --orange-color: rgb(255, 123, 0);
+    --error-color: #DC2700;
+    --success-color: #00ac42;
 }
 
 * {
@@ -20,6 +23,10 @@ body {
 a {
     text-decoration: none;
     color: #000;
+}
+
+a:hover {
+    cursor: pointer;
 }
 
 
@@ -62,7 +69,7 @@ ul {
 }
 
 .navitems li:hover {
-    border-bottom: 3px rgb(255, 123, 0) solid;
+    border-bottom: 3px var(--orange-color) solid;
     padding-bottom: 3px;
 }
 
@@ -120,8 +127,27 @@ ul {
 
 
 /* DATA */
+.data-upload {
+    background-color: #fff;
+}
+
+#data_upload_id {
+    width: 50%;
+    height: 60px;
+    line-height: 60px;
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px auto;
+}
+    
 .data-upload a {
     text-decoration: underline;
+}
+    
+.data-upload a:hover {
+    color: var(--orange-color)
 }
 
 #output-data-upload {
@@ -130,19 +156,55 @@ ul {
 }
 
 .upload-error-message {
-    color: #DC2700;
+    color: var(--error-color);
     font-weight: bold;
     text-align: center;
 }
 
-#download_btn_id {
-    padding: 10px 20px;
-    background-color: var(--card-color);
-    border-radius: 5px;
-    border: 1px #888 solid;
+.upload-success-message {
+    color: var(--success-color);
+    font-weight: bold;
+    text-align: center;
 }
 
-#download_btn_id:hover {
-    transform: scale(0.99);
-    border-color: #333;
+.upload-form {
+    width: 60%;
+    margin: 20px auto;
+}
+
+.upload-form .grid {
+    /* justify-content: center; */
+    gap: 20px;
+}
+
+#club_dropdown_id select {
+    width: 140px;
+    height: 30px;
+    align-items: center;
+
+}
+
+.upload-form .number {
+    width: 100px;
+    height: 35px;
+    align-items: center;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+#missed_radio_id label {
+    margin-right: 10px;
+}
+
+/* #upload_form_date_id {
+    font-size: small;
+} */
+
+#upload_form_date_id input {
+    width: 140px;
+    height: 34px;
+    align-items: center;
+    border: 1px #000 solid;
+    border-radius: 3px;
 }
