@@ -155,107 +155,139 @@ home_layout = html.Div([
 
 # LAYOUT: Data
 data_layout = html.Div([
-    html.Div(className="container data-upload", children=[
-        html.H3("Data page"),
+    html.Div(className="data-container", children=[
 
-        # Download button
-        html.Button("Download PDF", id="download_btn_id", className="btn"),
-        dcc.Download(id='download_id'),
+        # HEADER CARD
+        html.Div(className="upload-head", children=[
+            html.Div(className="card", children=[
+                html.H1("Save New Shots"),
+                html.Div(id="upload-head-text", children=[
+                    html.P("New golf shot data can be saved below, either by inputing them one at a time or by uploading a file with multiple shots."),
+                    html.P("Press the download button to get a spreadsheet for logging shots in.")
+                ]),
 
-        #Upload box
-        dcc.Upload(
-            id="data_upload_id",
-            children=html.Div([
-                'Drag and Drop or ',
-                html.A(className="upload_link", children=['Select Files'])
-            ]),
-            # Allow multiple files to be uploaded
-            multiple=True,
-        ),
-        html.Div(id="output-data-upload"),
-
-        # Upload form
-        html.Div(className="upload-form", children=[
-            html.Div(id="upload_form_response"),
-            html.Div(className="grid grid-5", children=[
-                html.Div([
-                    html.H4("Club"),
-                    dcc.Dropdown(
-                        id="club_dropdown_id",
-                        className="upload-form-element",
-                        options=[
-                            {'label': '1 Wood', 'value': '1W'},
-                            {'label': '3 Wood', 'value': '3W'},
-                            {'label': '4 Iron', 'value': '4'},
-                            {'label': '5 Iron', 'value': '5'},
-                            {'label': '6 Iron', 'value': '6'},
-                            {'label': '7 Iron', 'value': '7'},
-                            {'label': '8 Iron', 'value': '8'},
-                            {'label': '9 Iron', 'value': '9'},
-                            {'label': 'P', 'value': 'P'},
-                            {'label': '52', 'value': '52'},
-                            {'label': '56', 'value': '56'},
-                        ],
-                        style={
-                            'fontSize': '15px',
-                            'height': '10px',
-                            'width': '100px',
-                            'borderColor': '#000000',
-                            }
-                    )
-                ]),
-                html.Div([
-                    html.H4("Total distance"),
-                    dcc.Input(
-                        id='total_distance_input_id',
-                        className="upload-form-element number",
-                        type='number',
-                        min=0,
-                        max=300,
-                        step=1,
-                        placeholder="Meters",
-                    )
-                ]),
-                html.Div([
-                    html.H4("Carry distance"),
-                    dcc.Input(
-                        id='carry_distance_input_id',
-                        className="upload-form-element number",
-                        type='number',
-                        min=0,
-                        max=300,
-                        step=1,
-                        placeholder="Meters",
-                    )
-                ]),
-                html.Div([
-                    html.H4("Missed"),
-                    dcc.RadioItems(
-                        id="missed_radio_id",
-                        options=[
-                            {'label': 'Yes', 'value': 1},
-                            {'label': 'No', 'value': 0},
-                        ],
-                        value=0,
-                    )
-                ]),
-                html.Div([
-                    html.H4("Date"),
-                    dcc.DatePickerSingle(
-                        id="upload_form_date_id",
-                        className="upload-form-element",
-                        first_day_of_week=1,
-                        initial_visible_month=datetime.datetime.now().date(),
-                        # date=datetime.datetime.now().date(),
-                        placeholder=f"{datetime.datetime.now().date()}",
-                        display_format="YYYY-MM-DD",
-                    )
-                ]),
-            ]),
-            html.Div([
-                html.Button("Save", className="btn", id="save_upload_form_btn"),
+                # Download button
+                html.Button("Download PDF", id="download_btn_id", className="btn"),
+                dcc.Download(id='download_id'),
             ])
         ]),
+
+        html.Div(className="data-upload grid grid-2", children=[
+        
+            # UPLOAD BOX
+            html.Div(className="upload-box", children=[
+                html.Div(className="card", children=[
+                    html.H3("Save multiple data"),
+                    html.P("Several shots can be saved by uploading a csv file in the box below."),
+                    html.P("The required columns and allowed values are:"),
+                    html.Ul([
+                        html.Li(["club: 1W, 3W, 4, 5, 6, 7, 8, 9, P, 52, 56"]),
+                        html.Li(["total_distance: Integer"]),
+                        html.Li(["carry_distance: Integer"]),
+                        html.Li(["missed: 0, 1"]),
+                        html.Li(["date: yyyy-mm-dd"]),
+                    ]),
+                    dcc.Upload(
+                        id="data_upload_id",
+                        children=html.Div([
+                            'Drag and Drop or ',
+                            html.A(className="upload_link", children=['Select Files'])
+                        ]),
+                        # Allow multiple files to be uploaded
+                        multiple=True,
+                    ),
+                ]),
+            ]),
+
+            # UPLOAD FORM
+            html.Div(className="upload-form", children=[
+                html.Div(className="card", children=[
+                    html.H3("Save single shots"),
+                    html.P("You can enter single shots in this form. All fields must be filled."),
+                    html.Div(className="form grid grid-5", children=[
+                        html.Div([
+                            html.H4("Club"),
+                            dcc.Dropdown(
+                                id="club_dropdown_id",
+                                className="upload-form-element",
+                                options=[
+                                    {'label': '1 Wood', 'value': '1W'},
+                                    {'label': '3 Wood', 'value': '3W'},
+                                    {'label': '4 Iron', 'value': '4'},
+                                    {'label': '5 Iron', 'value': '5'},
+                                    {'label': '6 Iron', 'value': '6'},
+                                    {'label': '7 Iron', 'value': '7'},
+                                    {'label': '8 Iron', 'value': '8'},
+                                    {'label': '9 Iron', 'value': '9'},
+                                    {'label': 'P', 'value': 'P'},
+                                    {'label': '52', 'value': '52'},
+                                    {'label': '56', 'value': '56'},
+                                ],
+                                style={
+                                    'fontSize': '15px',
+                                    'height': '10px',
+                                    'width': '100px',
+                                    'borderColor': '#000000',
+                                    }
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Total distance"),
+                            dcc.Input(
+                                id='total_distance_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=300,
+                                step=1,
+                                placeholder="Meters",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Carry distance"),
+                            dcc.Input(
+                                id='carry_distance_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=300,
+                                step=1,
+                                placeholder="Meters",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Missed"),
+                            dcc.RadioItems(
+                                id="missed_radio_id",
+                                options=[
+                                    {'label': 'Yes', 'value': 1},
+                                    {'label': 'No', 'value': 0},
+                                ],
+                                value=0,
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Date"),
+                            dcc.DatePickerSingle(
+                                id="upload_form_date_id",
+                                className="upload-form-element",
+                                first_day_of_week=1,
+                                initial_visible_month=datetime.datetime.now().date(),
+                                placeholder=f"{datetime.datetime.now().date()}",
+                                display_format="YYYY-MM-DD",
+                            )
+                        ]),
+                    ]),
+                    html.Div([
+                        html.Button("Save", className="btn", id="save_upload_form_btn"),
+                    ]),
+                    html.Div(id="upload_form_response"),
+                ]),
+            ]),
+        ]),
+
+        # Display a table with uploaded CSV data
+        html.Div(id="output-data-upload"),
     ])
 ])
 
@@ -351,7 +383,7 @@ def upload_form_to_db(n_clicks, club, total, carry, missed, date):
     
     # Check if all fields are entered correctly
     if any([arg is None for arg in [club, total, carry, date]]):
-        return html.H3(className="upload-error-message", children=[
+        return html.H2(className="upload-error-message", children=[
             "All fields are required"
         ])
     
