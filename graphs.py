@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
+from plotly.colors import n_colors
 import utils
 
 def my_dist_plot(df, range, distance='total', show_hist=False):
@@ -36,16 +37,18 @@ def my_dist_plot(df, range, distance='total', show_hist=False):
     return fig
 
 
-def get_box_plot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
+def get_boxplot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
 
+    colors = utils.rainbow_colors(len(df.club.unique()))
 
     # Get an ordered list of clubs, excluding clubs with no data
     clubs = [club for club in utils.club_enum.keys() if club in df.club.unique()]
     clubs.reverse()
 
-    colors = utils.rainbow_colors(len(df.club.unique()))
     xmin = df.carry_distance.min() - 10
     xmax = df.total_distance.max() + 10
+
+    # clubs, xmin, xmax = utils.get_clubs(df)
 
     fig = go.Figure()
     for club, color in zip(clubs, colors):
@@ -59,7 +62,7 @@ def get_box_plot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
 
     fig.update_layout(
         # height=300,
-        margin=dict(t=50, r=10, b=10, l=10),
+        margin=dict(t=60, r=10, b=10, l=10),
         legend=dict(
             orientation="h",
             yanchor="bottom",
@@ -69,21 +72,47 @@ def get_box_plot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
         )
     )
 
+    # Set properties to selected axis
+    axis_kwargs = {'range': [xmin, xmax], 'tickmode': 'linear', 'tick0': 0, 'dtick': 10}
     if axis == 'yaxis':
-        fig.update_layout(
-            yaxis=dict(
-                range=[xmin, xmax],
-                tickmode='linear',
-                tick0=0,
-                dtick=10),
-        )
+        fig.update_layout(yaxis=axis_kwargs)
     else:
-        fig.update_layout(
-            xaxis=dict(
-                range=[xmin, xmax],
-                tickmode='linear',
-                tick0=0,
-                dtick=10),
-        )
+        fig.update_layout(xaxis=axis_kwargs)
 
     return fig
+
+
+def get_ridgeplot_fig(df, distance='total_distance', nvals='all'):
+
+    clubs, xmin, xmax = utils.get_clubs(df)
+    colors = n_colors('rgb(242, 139, 0)', 'rgb(206, 0, 0)', 12, colortype='rgb')
+    fig = go.Figure()
+    for club, color in zip(clubs, colors):
+        name = utils.club_enum[club]
+        array = df.groupby('club').get_group(club)[distance].values
+        data = utils.get_values(array, nvals)
+        fig.add_trace(go.Violin(x=data, name=name, line_color=color))
+
+    fig.update_traces(
+        orientation='h',
+        side='positive',
+        width=3,
+        points=False,
+    )
+
+    fig.update_layout(
+        margin=dict(t=60, r=10, b=10, l=10),
+        xaxis_showgrid=True,
+        xaxis_zeroline=False,
+        showlegend=False,
+        xaxis=dict(
+            range=[xmin-10, xmax+20],
+            tickmode='linear',
+            tick0=0,
+            dtick=10,
+        )
+    )
+
+    return fig
+
+    return

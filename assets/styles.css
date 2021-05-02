@@ -116,6 +116,10 @@ ul {
     justify-content: space-evenly;
 }
 
+.ridgeplot-options {
+    justify-content: space-evenly;
+}
+
 
 /* RIDGE PLOT */
 .ridge-plot {

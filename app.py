@@ -139,6 +139,28 @@ home_layout = html.Div([
             # RIDGE PLOT
             html.Div(className="ridge-plot card", children=[
                 html.H3("Ridge plot"),
+                dcc.Graph(id="ridgeplot-graph"),
+                html.Div(className="ridgeplot-options flex", children=[
+                    dcc.RadioItems(
+                        id='ridge_radio_distance_id',
+                        options=[
+                            {'label': 'Total distance', 'value': 'total_distance'},
+                            {'label': 'Carry distance', 'value': 'carry_distance'},
+                        ],
+                        value='total_distance',
+                        labelStyle={'display': 'block'}
+                    ),
+                    dcc.RadioItems(
+                        id='ridge_radio_nvals_id',
+                        options=[
+                            {'label': 'All shots', 'value': 'all'},
+                            {'label': 'Last 100 shots', 'value': 'last100'},
+                            {'label': 'Last 50 shots', 'value': 'last50'},
+                        ],
+                        value='all',
+                        labelStyle={'display': 'block'}
+                    ),
+                ]),
             ]),
 
             # Table
@@ -399,8 +421,17 @@ def print_range(val):
     Input('box_radio_nvals_id', 'value'),
 )
 def generate_box_plot(distance, axis, nvals):
-    fig = get_box_plot_fig(df, distance=distance, axis=axis, nvals=nvals)    
-    return fig    
+    fig = get_boxplot_fig(df, distance=distance, axis=axis, nvals=nvals)    
+    return fig
+
+@app.callback(
+    Output('ridgeplot-graph', 'figure'),
+    Input('ridge_radio_distance_id', 'value'),
+    Input('ridge_radio_nvals_id', 'value'),
+)
+def generate_ridgeplot(distance, nvals):
+    fig = get_ridgeplot_fig(df, distance=distance, nvals=nvals)    
+    return fig
 
 """
 CALLBACK: Data page

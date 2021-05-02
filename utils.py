@@ -27,7 +27,7 @@ club_enum = {
 }
 
 def rainbow_colors(n):
-    return ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 300, n)]
+    return ['hsl('+str(h)+',60%'+',60%)' for h in np.linspace(0, 300, n)]
 
 
 def get_values(array, nvals):
@@ -42,6 +42,16 @@ def get_values(array, nvals):
         n = min(len(array), 50)
     
     return array[-n:]
+
+
+def get_clubs(df):
+    # Get an ordered list of clubs, excluding clubs with no data
+    clubs = [club for club in club_enum.keys() if club in df.club.unique()]
+    clubs.reverse()
+
+    clubmin = df.carry_distance.min() - 10
+    clubmax = df.total_distance.max() + 10
+    return (clubs, clubmin, clubmax)
 
 
 def longest_shot(df, d=0):
