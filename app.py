@@ -104,15 +104,36 @@ home_layout = html.Div([
             html.Div(className="box-plot card", children=[
                 html.H3("Box plot"),
                 dcc.Graph(id="box-plot-graph"),
-                dcc.RadioItems(
-                    id='box_radio_distance_id',
-                    options=[
-                        {'label': 'Total distance', 'value': 'total_distance'},
-                        {'label': 'Carry distance', 'value': 'carry_distance'},
-                    ],
-                    value='total_distance',
-                    labelStyle={'display': 'block'}
-                ),
+                html.Div(className="boxplot-options flex", children=[
+                    dcc.RadioItems(
+                        id='box_radio_distance_id',
+                        options=[
+                            {'label': 'Total distance', 'value': 'total_distance'},
+                            {'label': 'Carry distance', 'value': 'carry_distance'},
+                        ],
+                        value='total_distance',
+                        labelStyle={'display': 'block'}
+                    ),
+                    dcc.RadioItems(
+                        id='box_radio_axis_id',
+                        options=[
+                            {'label': 'Length on x-axis', 'value': 'xaxis'},
+                            {'label': 'Length on y-axis', 'value': 'yaxis'},
+                        ],
+                        value='xaxis',
+                        labelStyle={'display': 'block'}
+                    ),
+                    dcc.RadioItems(
+                        id='box_radio_nvals_id',
+                        options=[
+                            {'label': 'All shots', 'value': 'all'},
+                            {'label': 'Last 100 shots', 'value': 'last100'},
+                            {'label': 'Last 50 shots', 'value': 'last50'},
+                        ],
+                        value='all',
+                        labelStyle={'display': 'block'}
+                    ),
+                ]),
             ]),
             
             # RIDGE PLOT
@@ -373,10 +394,12 @@ def print_range(val):
 
 @app.callback(
     Output('box-plot-graph', 'figure'),
-    Input('box_radio_distance_id', 'value')
+    Input('box_radio_distance_id', 'value'),
+    Input('box_radio_axis_id', 'value'),
+    Input('box_radio_nvals_id', 'value'),
 )
-def generate_box_plot(distance):
-    fig = get_box_plot_fig(df, distance=distance)    
+def generate_box_plot(distance, axis, nvals):
+    fig = get_box_plot_fig(df, distance=distance, axis=axis, nvals=nvals)    
     return fig    
 
 """

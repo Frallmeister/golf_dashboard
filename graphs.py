@@ -36,7 +36,8 @@ def my_dist_plot(df, range, distance='total', show_hist=False):
     return fig
 
 
-def get_box_plot_fig(df, distance='total_distance', n_shots=None):
+def get_box_plot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
+
 
     # Get an ordered list of clubs, excluding clubs with no data
     clubs = [club for club in utils.club_enum.keys() if club in df.club.unique()]
@@ -49,15 +50,14 @@ def get_box_plot_fig(df, distance='total_distance', n_shots=None):
     fig = go.Figure()
     for club, color in zip(clubs, colors):
         values = df.groupby('club').get_group(club)[distance].values
+        values = utils.get_values(values, nvals)
         name = utils.club_enum[club]
-        fig.add_trace(go.Box(x=values, name=name, marker_color=color))
+        if axis == 'yaxis':
+            fig.add_trace(go.Box(y=values, name=name, marker_color=color))
+        else:
+            fig.add_trace(go.Box(x=values, name=name, marker_color=color))
 
     fig.update_layout(
-        xaxis=dict(
-            range=[xmin, xmax],
-            tickmode='linear',
-            tick0=0,
-            dtick=10),
         # height=300,
         margin=dict(t=50, r=10, b=10, l=10),
         legend=dict(
@@ -68,4 +68,22 @@ def get_box_plot_fig(df, distance='total_distance', n_shots=None):
             x=1 
         )
     )
+
+    if axis == 'yaxis':
+        fig.update_layout(
+            yaxis=dict(
+                range=[xmin, xmax],
+                tickmode='linear',
+                tick0=0,
+                dtick=10),
+        )
+    else:
+        fig.update_layout(
+            xaxis=dict(
+                range=[xmin, xmax],
+                tickmode='linear',
+                tick0=0,
+                dtick=10),
+        )
+
     return fig

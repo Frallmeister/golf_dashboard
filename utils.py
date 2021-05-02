@@ -29,6 +29,21 @@ club_enum = {
 def rainbow_colors(n):
     return ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 300, n)]
 
+
+def get_values(array, nvals):
+    """
+    Returns the last nvals values of array
+    """
+    if nvals == 'all':
+        n = len(array)
+    elif nvals == 'last100':
+        n = min(len(array), 100)
+    else:
+        n = min(len(array), 50)
+    
+    return array[-n:]
+
+
 def longest_shot(df, d=0):
 
     distance = 'total_distance' if d==0 else 'carry_distance'

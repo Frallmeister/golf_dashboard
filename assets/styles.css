@@ -105,6 +105,23 @@ ul {
     border-bottom: 1px #ccc solid;
 }
 
+
+/* BOX PLOT */
+.box-plot {
+    grid-column: 1 /span 3;
+    height: 600px;
+}
+
+.boxplot-options {
+    justify-content: space-evenly;
+}
+
+
+/* RIDGE PLOT */
+.ridge-plot {
+    grid-column: 4 /span 3;
+}
+
 /* TABLE */
 .stat-table {
     grid-column: 1 / span 2;
@@ -138,17 +155,6 @@ ul {
 .dist-plots .dist-plot-bottom div > label {
     margin-right: 10px;
     /* margin-top: 30px; */
-}
-
-/* BOX PLOT */
-.box-plot {
-    grid-column: 1 /span 3;
-    height: 600px;
-}
-
-/* RIDGE PLOT */
-.ridge-plot {
-    grid-column: 4 /span 3;
 }
 
 
