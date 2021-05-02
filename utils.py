@@ -3,11 +3,13 @@ import datetime
 import io
 import csv
 
+import numpy as np
 import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import plotly.express as px
 from models import Shots
 
 club_enum = {
@@ -23,6 +25,9 @@ club_enum = {
     '52': '52 Wedge',
     '56': '56 Wedge',
 }
+
+def rainbow_colors(n):
+    return ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 300, n)]
 
 def longest_shot(df, d=0):
 
@@ -164,6 +169,7 @@ def parse_file_upload(contents, filename, engine, session):
     
 
     col_dict = dict(enumerate(column_names.split(',')))
+    nn=1
     for row in decoded.decode('utf-8').split('\n')[1:]:
         cells = row.strip().split(',')
         entry = {col_dict[i]:cells[i] for i in range(5)}
@@ -176,12 +182,16 @@ def parse_file_upload(contents, filename, engine, session):
             missed = bool(int(entry['missed'])),
             date = datetime.datetime.strptime(entry['date'], '%Y-%m-%d'),
         )
+        nn+=1
         session.add(new_shot)
     session.commit()
 
 
     return html.Div(className="table card", children=[
-        html.Div("The following data was uploaded"),
+        html.H2(
+        className = "upload-success-message",
+        children = ["The following data was saved"],
+        ),
         dash_table.DataTable(
             id="upload_table_id",
             data = dff.to_dict('records'),

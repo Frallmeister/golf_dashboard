@@ -99,8 +99,29 @@ home_layout = html.Div([
     ###### MAIN
     html.Div(className="container main", children=[
         html.Div(className="grid grid-6", children=[
+            
+            # BOX PLOT
+            html.Div(className="box-plot card", children=[
+                html.H3("Box plot"),
+                dcc.Graph(id="box-plot-graph"),
+                dcc.RadioItems(
+                    id='box_radio_distance_id',
+                    options=[
+                        {'label': 'Total distance', 'value': 'total_distance'},
+                        {'label': 'Carry distance', 'value': 'carry_distance'},
+                    ],
+                    value='total_distance',
+                    labelStyle={'display': 'block'}
+                ),
+            ]),
+            
+            # RIDGE PLOT
+            html.Div(className="ridge-plot card", children=[
+                html.H3("Ridge plot"),
+            ]),
+
+            # Table
             html.Div(className="stat-table", children=[
-                # Table
                 html.Div(className="table card", children=[
                     html.H3("Statistics"),
                     html.Div(id="table_id"),
@@ -115,6 +136,7 @@ home_layout = html.Div([
                     )
                 ]),
             ]),
+            
             # DIST PLOT
             html.Div(className="dist-plots card", children=[
                 html.H3("Length distribution"),
@@ -143,13 +165,12 @@ home_layout = html.Div([
                             ],
                             value='total',
                             labelStyle={'display': 'block'}
-                        ) 
+                        )
                     )
-                ])
-
-            ])
+                ]),
+            ]),
         ]),
-    ])
+    ]),
 ])
 
 
@@ -350,6 +371,13 @@ def print_range(val):
     a, b = val
     return f"Selected range {a}-{b} m"
 
+@app.callback(
+    Output('box-plot-graph', 'figure'),
+    Input('box_radio_distance_id', 'value')
+)
+def generate_box_plot(distance):
+    fig = get_box_plot_fig(df, distance=distance)    
+    return fig    
 
 """
 CALLBACK: Data page
@@ -396,7 +424,7 @@ def upload_form_to_db(n_clicks, club, total, carry, missed, date):
     )
     session.add(new_shot)
     session.commit()
-    return html.H3(
+    return html.H2(
         className = "upload-success-message",
         children = ["Shot saved"],
         )

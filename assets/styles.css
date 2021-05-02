@@ -83,9 +83,13 @@ ul {
     height: 100%;
 }
 
+#page-content {
+    margin-bottom: 20px;
+}
+
 /* HEADER */
 .header {
-    margin-top: 20px;
+    margin: 20px 0;
     justify-content: space-between;
     text-align: center;
 }
@@ -104,21 +108,26 @@ ul {
 /* TABLE */
 .stat-table {
     grid-column: 1 / span 2;
-    margin: 15px 0;
+    /* margin-top: 15px; */
+}
+
+.table {
+    height: 500px;
+}
+
+#table-total-carry {
+    margin-top: 10px;
 }
 
 #table-total-carry > label {
     margin-right: 10px;
 }
 
-#stat-table {
-    margin-bottom: 15px;
-}
-
 /* DIST-PLOTS */
 .dist-plots {
     grid-column: 3 / span 4;
-    margin: 15px 0;
+    /* margin-top: 15px; */
+    height: 500px;
 }
 
 .dist-plots .dist-plot-bottom > div {
@@ -129,6 +138,17 @@ ul {
 .dist-plots .dist-plot-bottom div > label {
     margin-right: 10px;
     /* margin-top: 30px; */
+}
+
+/* BOX PLOT */
+.box-plot {
+    grid-column: 1 /span 3;
+    height: 600px;
+}
+
+/* RIDGE PLOT */
+.ridge-plot {
+    grid-column: 4 /span 3;
 }
 
 
