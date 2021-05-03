@@ -26,6 +26,10 @@ club_enum = {
     '56': '56 Wedge',
 }
 
+
+def floor(val, n):
+    return n*int(val/n)
+
 def rainbow_colors(n):
     return ['hsl('+str(h)+',60%'+',60%)' for h in np.linspace(0, 300, n)]
 

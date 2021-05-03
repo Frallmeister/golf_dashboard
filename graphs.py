@@ -116,4 +116,56 @@ def get_ridgeplot_fig(df, distance='total_distance', nvals='all'):
 
     return fig
 
-    return
+def get_heatplot_fig(df, stat, window_size):
+    clubs = [club for club in utils.club_enum if club in df.club.unique()]
+
+    # Create df with rolling stddev
+    dff = df.groupby('club')
+
+    z = []
+    for club in clubs:
+        # Get values for each club and replace nan with None
+        vals = dff.get_group(club).total_distance.dropna().rolling(window_size)
+        if stat == 'stddev':
+            vals = vals.std().to_list()
+        elif stat == 'mean':
+            vals = vals.mean().to_list()
+        else:
+            vals = vals.median().to_list()
+
+        z.append(vals)
+
+    n_y = max([len(i) for i in z])
+    y = list(range(window_size, n_y+1))
+    y = list(range(n_y+1))
+
+    # Plot heatmap
+    fig = go.Figure(data = go.Heatmap(
+        z = z,
+        y=y,
+        x=clubs,
+        hoverongaps=False,
+        showscale=True,
+        transpose=True,
+        # colorscale='Plasma',
+        # colorscale='Bluered',
+        # colorscale='Jet',
+        colorscale='Turbo',
+        # colorscale='Portland',
+        
+    ))
+
+    fig.update_layout(
+        height=300,
+        autosize=True,
+        yaxis=dict(
+            range=[window_size, n_y],
+        ),
+        margin=dict(t=0, r=10, b=10, l=10),
+        xaxis_zeroline=False,
+        showlegend=False,
+        xaxis_title="<b>Club</b>",
+        yaxis_title="Number of shots",
+    )
+
+    return fig

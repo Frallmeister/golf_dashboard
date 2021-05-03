@@ -212,6 +212,32 @@ home_layout = html.Div([
                     )
                 ]),
             ]),
+            html.Div(className="heatplot", children=[
+                html.Div(className="card", children=[
+                    html.H3("Heatmap"),
+                    dcc.Graph(id="heatplot-graph"),
+                    html.Div([
+                        dcc.RadioItems(
+                            id='heat-data-option',
+                            options=[
+                                {'label': 'Std. Dev', 'value': 'stddev'},
+                                {'label': 'Median', 'value': 'median'},
+                                {'label': 'Mean', 'value': 'mean'},
+                            ],
+                            value='stddev',
+                            labelStyle={'display': 'block'}
+                        ),
+                        dcc.Slider(
+                            id="heat-slider",
+                            min=1,
+                            max=df.groupby('club').count().total_distance.max(),
+                            marks={i: str(i) for i in range(0, 101, 5)},
+                            value=20,
+                            step=None,
+                        )
+                    ])
+                ]),
+            ]),
         ]),
     ]),
 ])
@@ -375,6 +401,7 @@ def table_component(distance):
     table = create_table(df, distance=distance)
     return table
 
+
 @app.callback(
     Output('dist-plot', 'children'),
     Input('dist-total-carry-option', 'value'),
@@ -405,6 +432,7 @@ def slider_config(distance):
     max_ = 25*int(max_/25)+25
     return marks, value, max_
 
+
 @app.callback(
     Output('slider-range-text', 'children'),
     Input('dist-plot-range', 'value'))
@@ -413,6 +441,7 @@ def print_range(val):
     """
     a, b = val
     return f"Selected range: {a}-{b} m"
+
 
 @app.callback(
     Output('box-plot-graph', 'figure'),
@@ -424,6 +453,7 @@ def generate_box_plot(distance, axis, nvals):
     fig = get_boxplot_fig(df, distance=distance, axis=axis, nvals=nvals)    
     return fig
 
+
 @app.callback(
     Output('ridgeplot-graph', 'figure'),
     Input('ridge_radio_distance_id', 'value'),
@@ -431,6 +461,16 @@ def generate_box_plot(distance, axis, nvals):
 )
 def generate_ridgeplot(distance, nvals):
     fig = get_ridgeplot_fig(df, distance=distance, nvals=nvals)    
+    return fig
+
+
+@app.callback(
+    Output('heatplot-graph', 'figure'),
+    Input('heat-data-option', 'value'),
+    Input('heat-slider', 'value'),
+)
+def generate_heatplot(stat, window_size):
+    fig = get_heatplot_fig(df, stat, window_size)
     return fig
 
 """
