@@ -117,8 +117,8 @@ home_layout = html.Div([
                     dcc.RadioItems(
                         id='box_radio_axis_id',
                         options=[
-                            {'label': 'Length on x-axis', 'value': 'xaxis'},
-                            {'label': 'Length on y-axis', 'value': 'yaxis'},
+                            {'label': 'Distance on x-axis', 'value': 'xaxis'},
+                            {'label': 'Distance on y-axis', 'value': 'yaxis'},
                         ],
                         value='xaxis',
                         labelStyle={'display': 'block'}
@@ -175,7 +175,7 @@ home_layout = html.Div([
                             {'label': 'Carry distance', 'value': 'carry'},
                         ],
                         value='total',
-                        labelStyle={'display': 'inline-block'}
+                        labelStyle={'display': 'block'}
                     )
                 ]),
             ]),
@@ -412,7 +412,7 @@ def print_range(val):
     """
     """
     a, b = val
-    return f"Selected range {a}-{b} m"
+    return f"Selected range: {a}-{b} m"
 
 @app.callback(
     Output('box-plot-graph', 'figure'),

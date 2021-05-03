@@ -16,7 +16,7 @@ def my_dist_plot(df, range, distance='total', show_hist=False):
     hist_data = [groups.get_group(club)[d].dropna().values for club in clubs]
     group_labels = [utils.club_enum[club] for club in clubs]
 
-    fig = ff.create_distplot(hist_data, group_labels, show_hist=show_hist)
+    fig = ff.create_distplot(hist_data, group_labels, show_hist=show_hist, show_rug=False)
     fig.update_layout(
         xaxis=dict(
             range=range,
@@ -62,14 +62,15 @@ def get_boxplot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
 
     fig.update_layout(
         # height=300,
-        margin=dict(t=60, r=10, b=10, l=10),
+        margin=dict(t=0, r=10, b=10, l=10),
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
             x=1 
-        )
+        ),
+        showlegend=False,
     )
 
     # Set properties to selected axis
@@ -101,7 +102,7 @@ def get_ridgeplot_fig(df, distance='total_distance', nvals='all'):
     )
 
     fig.update_layout(
-        margin=dict(t=60, r=10, b=10, l=10),
+        margin=dict(t=0, r=10, b=10, l=10),
         xaxis_showgrid=True,
         xaxis_zeroline=False,
         showlegend=False,
