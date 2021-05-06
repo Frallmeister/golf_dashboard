@@ -109,7 +109,7 @@ ul {
 /* BOX PLOT */
 .box-plot {
     grid-column: 1 /span 3;
-    height: 600px;
+    /* height: 600px; */
 }
 
 .boxplot-options {

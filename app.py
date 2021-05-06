@@ -35,6 +35,8 @@ df = pd.read_sql_table(
 
 # Instantiate Dash app
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
+server = app.server
+
 app.title = "My Golf Progress"
 
 app.layout = html.Div(children=[
