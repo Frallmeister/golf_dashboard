@@ -24,7 +24,8 @@ if os.getenv("DATABASE_URL") == 'postgres://Fredrik':
     db_pw = os.environ.get('MYSQLPW')
     db_uri = f"mysql+pymysql://root:{db_pw}@localhost:3306/golf_progress"
 else:
-    db_uri = os.getenv("DATABASE_URL")
+    db_uri = os.getenv("DATABASE_URL").strip('postgres')
+    db_uri = 'postgresql+psycopg2' + db_uri
 
 engine = db.create_engine(db_uri, echo=True)
 
