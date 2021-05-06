@@ -19,18 +19,23 @@ from models import Shots
 from utils import *
 from graphs import *
 
-# db_pw = os.environ.get('MYSQLPW')
-# db_uri = f"mysql+pymysql://root:{db_pw}@localhost:3306/golf_progress"
-# engine = db.create_engine(db_uri, echo=True)
+# 
+if os.getenv("DATABASE_URL") == 'postgres://Fredrik':
+    db_pw = os.environ.get('MYSQLPW')
+    db_uri = f"mysql+pymysql://root:{db_pw}@localhost:3306/golf_progress"
+else:
+    db_uri = os.getenv("DATABASE_URL")
 
-# Session = db.orm.sessionmaker(bind=engine)
-# session = Session()
+engine = db.create_engine(db_uri, echo=True)
 
-# df = pd.read_sql_table(
-#     'shots',
-#     engine,
-#     index_col='id',
-#     parse_dates=['date'])
+Session = db.orm.sessionmaker(bind=engine)
+session = Session()
+
+df = pd.read_sql_table(
+    'shots',
+    engine,
+    index_col='id',
+    parse_dates=['date'])
 
 
 # Instantiate Dash app
