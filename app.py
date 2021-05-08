@@ -38,6 +38,13 @@ df = pd.read_sql_table(
     index_col='id',
     parse_dates=['date'])
 
+def update_df(engine):
+    global df
+    df = pd.read_sql_table(
+        'shots',
+        engine,
+        index_col='id',
+        parse_dates=['date'])
 
 # Instantiate Dash app
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
@@ -265,8 +272,11 @@ data_layout = html.Div([
                 ]),
 
                 # Download button
-                html.Button("Download PDF", id="download_btn_id", className="btn"),
-                dcc.Download(id='download_id'),
+                html.Div(className="flex", children=[
+                    html.Button("Download PDF", id="download_btn_id", className="btn"),
+                    dcc.Download(id='download_id'),
+                    html.Button("Refresh Data", id="refresh_btn_id", className="btn"),
+                ])
             ])
         ]),
 
@@ -490,6 +500,11 @@ CALLBACK: Data page
 def download_pdf(n_clicks):
     return dcc.send_file("./assets/files/golf_logg.pdf")
 
+@app.callback(Output('refresh_id', 'data'),
+              Input('refresh_btn_id', 'n_clicks'),
+              prevent_initial_call=True)
+def refresh_data(n_clicks):
+    update_df(engine)
 
 @app.callback(Output('output-data-upload', 'children'),
               Input('data_upload_id', 'contents'),
@@ -498,6 +513,7 @@ def download_pdf(n_clicks):
 def update_output(list_of_contents, list_of_names, list_of_dates):
     if list_of_contents is not None:
         children = [parse_file_upload(contents, filename, engine, session) for contents, filename in zip(list_of_contents, list_of_names)]
+        update_df(engine)
         return children
 
 @app.callback(
@@ -526,10 +542,14 @@ def upload_form_to_db(n_clicks, club, total, carry, missed, date):
     )
     session.add(new_shot)
     session.commit()
+    update_df(engine)
     return html.H2(
         className = "upload-success-message",
         children = ["Shot saved"],
         )
+
+
+
 
 
 """ Helper functions """

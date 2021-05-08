@@ -27,6 +27,8 @@ club_enum = {
 }
 
 
+
+
 def floor(val, n):
     return n*int(val/n)
 
