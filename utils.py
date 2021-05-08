@@ -200,6 +200,7 @@ def parse_file_upload(contents, filename, engine, session):
     col_dict = dict(enumerate(column_names.split(',')))
     nn=1
     for row in decoded.decode('utf-8').split('\n')[1:]:
+        print(f"row = {row}")
         cells = row.strip().split(',')
         entry = {col_dict[i]:cells[i] for i in range(5)}
 
