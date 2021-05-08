@@ -206,8 +206,8 @@ def parse_file_upload(contents, filename, engine, session):
         # Create new record
         new_shot = Shots(
             club = str(entry['club']),
-            total_distance = int(entry['total_distance']) if entry['total_distance'] else None,
-            carry_distance = int(entry['carry_distance']) if entry['carry_distance'] else None,
+            total_distance = int(float(entry['total_distance'])) if entry['total_distance'] else None,
+            carry_distance = int(float(entry['carry_distance'])) if entry['carry_distance'] else None,
             missed = bool(int(entry['missed'])) if entry['missed'] else None,
             date = datetime.datetime.strptime(entry['date'], '%Y-%m-%d'),
         )
