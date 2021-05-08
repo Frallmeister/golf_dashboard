@@ -116,14 +116,14 @@ ul {
     justify-content: space-evenly;
 }
 
-.ridgeplot-options {
-    justify-content: space-evenly;
-}
-
 
 /* RIDGE PLOT */
 .ridge-plot {
     grid-column: 4 /span 3;
+}
+
+.ridgeplot-options {
+    justify-content: space-evenly;
 }
 
 /* TABLE */
@@ -300,4 +300,29 @@ ul {
 .DateInput {
     /* Overridinig dash style to get rid of ugly border in the date widget */
     width: unset;
+}
+
+
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 1200px) {
+    .box-plot {
+        grid-column: 1 /span 6;
+    }
+
+    .ridge-plot {
+        grid-column: 1 /span 6;
+    }
+
+    .stat-table {
+        grid-column: 1 / span 6;
+    }
+    
+    .dist-plots {
+        grid-column: 1 / span 6;
+    }
+
+    .heatplot {
+        grid-column: 1 / span 6;
+    }
 }
