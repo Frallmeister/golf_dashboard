@@ -401,10 +401,35 @@ data_layout = html.Div([
 
 
 # LAYOUT: Club details
-details_layout = html.Div([
-    html.H3("Club details")
+details_layout = html.Div(className="container", children=[
     # Tabs and stuff here
+    dcc.Tabs(id="club_tabs_id", value="1W", children=[
+        dcc.Tab(label="1 Wood", value="1W"),
+        dcc.Tab(label="3 Wood", value="3W"),
+        dcc.Tab(label="4", value="4"),
+        dcc.Tab(label="5", value="5"),
+        dcc.Tab(label="6", value="6"),
+        dcc.Tab(label="7", value="7"),
+        dcc.Tab(label="8", value="8"),
+        dcc.Tab(label="9", value="9"),
+        dcc.Tab(label="P", value="P"),
+        dcc.Tab(label="52", value="52"),
+        dcc.Tab(label="56", value="56"),
+    ]),
+    html.Div(className="club-details", children=[
+        html.Div(className="grid grid-6", children=[
+            html.Div(className="error-band", children=[
+                html.H3("Error band"),
+            ])
+        ]),
+    ])
 ])
+
+# @app.callback(
+#     Output('club_tab_id', 'children'),
+#     Input('club_tabs_id', 'value'))
+# def table_component(tab):
+#     return f"{tab}"
 
 
 

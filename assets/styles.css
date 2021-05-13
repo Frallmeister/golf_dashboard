@@ -39,7 +39,7 @@ ul {
     list-style-type: none;
 }
 
-/* NAVBAR */
+/* ####### NAVBAR ####### */
 .navbar {
     height: 70px;
     margin-bottom: 0px;
@@ -94,7 +94,7 @@ ul {
     text-align: center;
 }
 
-/* MAIN */
+/* ####### MAIN ####### */
 .main {
     margin: 10px 0;
 }
@@ -166,7 +166,7 @@ ul {
 }
 
 
-/* DATA */
+/* ####### DATA ####### */
 
 .upload-head {
     margin: 0 auto;
@@ -300,6 +300,33 @@ ul {
 .DateInput {
     /* Overridinig dash style to get rid of ugly border in the date widget */
     width: unset;
+}
+
+
+/* ####### CLUB DETAILS ####### */
+
+#club_tabs_id {
+    margin-top: 20px;
+}
+
+.club-details {
+    background-color: var(--card-color);
+    /* border-radius: 2px; */
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    padding: 10px 20px;
+    width: 100%;
+    align-items: center;
+}
+
+.club-details h3 {
+    margin-bottom: 20px;
+    color: #666;
+    border-bottom: 1px #ccc solid;
+}
+
+.error-band {
+    grid-column: 1 / span 3;
+    margin-top: 15px;
 }
 
 
