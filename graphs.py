@@ -169,3 +169,65 @@ def get_heatplot_fig(df, stat, window_size):
     )
 
     return fig
+
+
+def get_errorband_fig(df, club, column, window_size):
+    
+    roll = df.groupby('club').get_group(club)[column].dropna().rolling(window_size)
+    quant25 = roll.quantile(0.25)
+    quant50 = roll.quantile(0.5)
+    quant75 = roll.quantile(0.75)
+    n_shots = len(quant50)
+
+    ymax = df['total_distance'].max()
+    ymin = df['carry_distance'].min()
+    # range = [ymin-10, ymax+10]
+
+    dates = df.groupby('club').get_group(club).loc[window_size+1:, 'date']
+
+    fig = go.Figure([
+        go.Scatter(
+            name="Median",
+            x=list(range(n_shots)),
+            y=quant50,
+            mode='lines',
+            line=dict(color='rgb(31,119,180)'),
+            showlegend=False,
+        ),
+        go.Scatter(
+            name="75%",
+            x=list(range(n_shots)),
+            y=quant75,
+            mode='lines',
+            line=dict(width=0),
+            marker=dict(color='#444'),
+            showlegend=False,
+        ),
+        go.Scatter(
+            name="25%",
+            x=list(range(1, n_shots+1)),
+            y=quant25,
+            mode='lines',
+            line=dict(width=0),
+            marker=dict(color='#444'),
+            fillcolor='rgba(68, 68, 68, 0.2)',
+            fill='tonexty',
+            showlegend=False,
+        ),
+    ])
+
+    fig.update_layout(
+        yaxis_title="Median (m)",
+        xaxis_title="# Shots",
+        hovermode="x",
+        margin=dict(t=30, r=10, b=10, l=10),
+        xaxis=dict(
+            range=[window_size, n_shots],
+            # tickmode='linear',
+            # tick0=0,
+            # dtick=1,
+        ),
+        yaxis=dict(range=[ymin-10, ymax+10]),
+    )
+
+    return fig

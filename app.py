@@ -404,33 +404,45 @@ data_layout = html.Div([
 details_layout = html.Div(className="container", children=[
     # Tabs and stuff here
     dcc.Tabs(id="club_tabs_id", value="1W", children=[
-        dcc.Tab(label="1 Wood", value="1W"),
-        dcc.Tab(label="3 Wood", value="3W"),
-        dcc.Tab(label="4", value="4"),
-        dcc.Tab(label="5", value="5"),
-        dcc.Tab(label="6", value="6"),
-        dcc.Tab(label="7", value="7"),
-        dcc.Tab(label="8", value="8"),
-        dcc.Tab(label="9", value="9"),
-        dcc.Tab(label="P", value="P"),
-        dcc.Tab(label="52", value="52"),
-        dcc.Tab(label="56", value="56"),
+        dcc.Tab(label=val, value=key) for key, val in club_enum.items() if key in df.club.unique()
     ]),
     html.Div(className="club-details", children=[
         html.Div(className="grid grid-6", children=[
-            html.Div(className="error-band", children=[
+            html.Div(className="error-band card", children=[
                 html.H3("Error band"),
-            ])
+                dcc.Graph(id="error_band_graph_id"),
+                html.P("Window size"),
+                dcc.Slider(
+                    id="errorband_slider_id",
+                    min=1,
+                    max=df.groupby('club').count().total_distance.max(),
+                    marks={i: str(i) for i in range(0, 101, 5)},
+                    value=20,
+                    step=None,
+                ),
+                dcc.RadioItems(
+                    id='errband-total-carry-option',
+                    options=[
+                        {'label': 'Total distance', 'value': 'total_distance'},
+                        {'label': 'Carry distance', 'value': 'carry_distance'},
+                    ],
+                    value='total_distance',
+                    labelStyle={'display': 'inline-block'}
+                )
+            ]),
         ]),
     ])
 ])
 
-# @app.callback(
-#     Output('club_tab_id', 'children'),
-#     Input('club_tabs_id', 'value'))
-# def table_component(tab):
-#     return f"{tab}"
-
+@app.callback(
+    Output('error_band_graph_id', 'figure'),
+    Input('club_tabs_id', 'value'),
+    Input('errband-total-carry-option', 'value'),
+    Input('errorband_slider_id', 'value'),
+    )
+def plot_error_band(club, column, window_size):
+    fig = get_errorband_fig(df, club, column, window_size)
+    return fig
 
 
 """

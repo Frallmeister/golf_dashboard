@@ -26,7 +26,22 @@ club_enum = {
     '56': '56 Wedge',
 }
 
-
+def get_rolling_values(df, club, column='total_distance', window_size=20, stat='stddev'):
+    """
+    Return list with statistic over rolling value
+    """
+    roll = df.groupby('club').get_group(club)[column].dropna().rolling(window_size)
+    if stat == 'stddev':
+        vals = roll.std().dropna().to_list()
+    elif stat == 'mean':
+        vals = roll.mean().dropna().to_list()
+    elif stat == 'median':
+        vals = roll.median().dropna().to_list()
+    else:
+        return None
+    
+    date = df.groupby('club').get_group(club).loc[window_size+1:, 'date'].to_list()
+    return (vals, roll, date)
 
 
 def floor(val, n):
