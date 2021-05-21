@@ -15,13 +15,13 @@ class Shots(Base):
     missed = db.Column(db.Boolean)
     date = db.Column(db.Date)
     
-    ball_speed = db.Column(db.Integer, server_default=None))
-    launch_angle = db.Column(db.Integer, server_default=None))
-    height = db.Column(db.Integer, server_default=None))
-    impact_angle = db.Column(db.Integer, server_default=None))
-    hang_time = db.Column(db.Float, server_default=None))
-    curve = db.Column(db.Integer, server_default=None))
-    side = db.Column(db.Integer, server_default=None))
+    ball_speed = db.Column(db.Integer, server_default=None)
+    launch_angle = db.Column(db.Integer, server_default=None)
+    height = db.Column(db.Integer, server_default=None)
+    impact_angle = db.Column(db.Integer, server_default=None)
+    hang_time = db.Column(db.Float, server_default=None)
+    curve = db.Column(db.Integer, server_default=None)
+    side = db.Column(db.Integer, server_default=None)
 
 
 # Base.metadata.create_all(engine)
