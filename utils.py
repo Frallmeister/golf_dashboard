@@ -187,7 +187,7 @@ def parse_file_upload(contents, filename, engine, session):
     list_content = decoded.decode('utf-8').split('\n')
     column_names = list_content[0].strip()
     expected_columns = ['club', 'total_distance', 'carry_distance', 'missed', 'date']
-    if not all([column in column_names for column in expected_columns]) or len(column_names.split(','))!=5:
+    if not all([column in column_names for column in expected_columns]) or len(column_names.split(','))<5:
         print([column in column_names for column in expected_columns])
         print(column_names.split(','))
         return html.Div(

@@ -215,7 +215,7 @@ ul {
 }
 
 #output-data-upload {
-    width: 40%;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -237,7 +237,7 @@ ul {
 }
 
 .upload-box .card {
-    height: 340px;
+    height: 550px;
 }
 
 .upload-box ul {
@@ -257,7 +257,7 @@ ul {
 }
 
 .upload-form .card {
-    height: 340px;
+    height: 550px;
 }
 
 .upload-form .grid {
@@ -290,7 +290,7 @@ ul {
 
 #upload_form_date_id input {
     font-size: 15px;
-    /* width: 100px; */
+    width: 100px;
     height: 34px;
     align-items: center;
     border: 1px #000 solid;

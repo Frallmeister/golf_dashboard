@@ -287,13 +287,20 @@ data_layout = html.Div([
                 html.Div(className="card", children=[
                     html.H3("Save multiple data"),
                     html.P("Several shots can be saved by uploading a csv file in the box below."),
-                    html.P("The required columns and allowed values are:"),
+                    html.P("The following columns with allowed values can be uploaded. Columns with an asterisk are required."),
                     html.Ul([
-                        html.Li(["club: 1W, 3W, 4, 5, 6, 7, 8, 9, P, 52, 56"]),
-                        html.Li(["total_distance: Integer"]),
-                        html.Li(["carry_distance: Integer"]),
-                        html.Li(["missed: 0, 1"]),
-                        html.Li(["date: yyyy-mm-dd"]),
+                        html.Li(["*club: 1W, 3W, 4, 5, 6, 7, 8, 9, P, 52, 56"]),
+                        html.Li(["*total_distance: Integer"]),
+                        html.Li(["*carry_distance: Integer"]),
+                        html.Li(["*missed: 0, 1"]),
+                        html.Li(["*date: yyyy-mm-dd"]),
+                        html.Li(["ball_speed: Integer"]),
+                        html.Li(["launch_angle: Integer"]),
+                        html.Li(["height: Integer"]),
+                        html.Li(["impact_angle: Integer"]),
+                        html.Li(["hang_time: Float"]),
+                        html.Li(["curve: Integer"]),
+                        html.Li(["side: Integer"]),
                     ]),
                     dcc.Upload(
                         id="data_upload_id",
@@ -312,9 +319,9 @@ data_layout = html.Div([
                 html.Div(className="card", children=[
                     html.H3("Save single shots"),
                     html.P("You can enter single shots in this form. All fields must be filled."),
-                    html.Div(className="form grid grid-5", children=[
+                    html.Div(className="form grid grid-4", children=[
                         html.Div([
-                            html.H4("Club"),
+                            html.H4("*Club"),
                             dcc.Dropdown(
                                 id="club_dropdown_id",
                                 className="upload-form-element",
@@ -340,7 +347,7 @@ data_layout = html.Div([
                             )
                         ]),
                         html.Div([
-                            html.H4("Total distance"),
+                            html.H4("*Total distance"),
                             dcc.Input(
                                 id='total_distance_input_id',
                                 className="upload-form-element number",
@@ -352,7 +359,7 @@ data_layout = html.Div([
                             )
                         ]),
                         html.Div([
-                            html.H4("Carry distance"),
+                            html.H4("*Carry distance"),
                             dcc.Input(
                                 id='carry_distance_input_id',
                                 className="upload-form-element number",
@@ -364,7 +371,7 @@ data_layout = html.Div([
                             )
                         ]),
                         html.Div([
-                            html.H4("Missed"),
+                            html.H4("*Missed"),
                             dcc.RadioItems(
                                 id="missed_radio_id",
                                 options=[
@@ -375,7 +382,7 @@ data_layout = html.Div([
                             )
                         ]),
                         html.Div([
-                            html.H4("Date"),
+                            html.H4("*Date"),
                             dcc.DatePickerSingle(
                                 id="upload_form_date_id",
                                 className="upload-form-element",
@@ -385,6 +392,90 @@ data_layout = html.Div([
                                 display_format="YYYY-MM-DD",
                             )
                         ]),
+                        html.Div([
+                            html.H4("Ball speed"),
+                            dcc.Input(
+                                id='ball_speed_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=1000,
+                                step=1,
+                                placeholder="m/s",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Launch angle"),
+                            dcc.Input(
+                                id='launch_angle_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=100,
+                                step=1,
+                                placeholder="Degree",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Height"),
+                            dcc.Input(
+                                id='height_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=300,
+                                step=1,
+                                placeholder="Meters",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Impact angle"),
+                            dcc.Input(
+                                id='impact_angle_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=100,
+                                step=1,
+                                placeholder="Degree",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Hang time"),
+                            dcc.Input(
+                                id='hang_time_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=0,
+                                max=100,
+                                step=0.1,
+                                placeholder="Seconds",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Curve"),
+                            dcc.Input(
+                                id='curve_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=-100,
+                                max=100,
+                                step=1,
+                                placeholder="Meters",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Side"),
+                            dcc.Input(
+                                id='side_input_id',
+                                className="upload-form-element number",
+                                type='number',
+                                min=-1000,
+                                max=100,
+                                step=1,
+                                placeholder="Meters",
+                            )
+                        ]),
                     ]),
                     html.Div([
                         html.Button("Save", className="btn", id="save_upload_form_btn"),
@@ -392,10 +483,10 @@ data_layout = html.Div([
                     html.Div(id="upload_form_response"),
                 ]),
             ]),
-        ]),
 
         # Display a table with uploaded CSV data
         html.Div(id="output-data-upload"),
+        ]),
     ])
 ])
 
@@ -561,13 +652,20 @@ def update_output(list_of_contents, list_of_names, list_of_dates):
     State('carry_distance_input_id', 'value'),
     State('missed_radio_id', 'value'),
     State('upload_form_date_id', 'date'),
+    State('ball_speed_input_id', 'value'),
+    State('launch_angle_input_id', 'value'),
+    State('height_input_id', 'value'),
+    State('impact_angle_input_id', 'value'),
+    State('hang_time_input_id', 'value'),
+    State('curve_input_id', 'value'),
+    State('side_input_id', 'value'),
     prevent_initial_call=True)
-def upload_form_to_db(n_clicks, club, total, carry, missed, date):
+def upload_form_to_db(n_clicks, club, total, carry, missed, date, ball_speed, launch_angle, height, impact_angle, hang_time, curve, side):
     
     # Check if all fields are entered correctly
     if any([arg is None for arg in [club, total, carry, date]]):
         return html.H2(className="upload-error-message", children=[
-            "All fields are required"
+            "Fields with an asterisk are required"
         ])
     
     new_shot = Shots(
