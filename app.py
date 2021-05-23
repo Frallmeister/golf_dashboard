@@ -292,8 +292,8 @@ data_layout = html.Div([
                         html.Li(["*club: 1W, 3W, 4, 5, 6, 7, 8, 9, P, 52, 56"]),
                         html.Li(["*total_distance: Integer"]),
                         html.Li(["*carry_distance: Integer"]),
-                        html.Li(["*missed: 0, 1"]),
                         html.Li(["*date: yyyy-mm-dd"]),
+                        html.Li(["missed: 0, 1"]),
                         html.Li(["ball_speed: Integer"]),
                         html.Li(["launch_angle: Integer"]),
                         html.Li(["height: Integer"]),
@@ -371,17 +371,6 @@ data_layout = html.Div([
                             )
                         ]),
                         html.Div([
-                            html.H4("*Missed"),
-                            dcc.RadioItems(
-                                id="missed_radio_id",
-                                options=[
-                                    {'label': 'Yes', 'value': 1},
-                                    {'label': 'No', 'value': 0},
-                                ],
-                                value=0,
-                            )
-                        ]),
-                        html.Div([
                             html.H4("*Date"),
                             dcc.DatePickerSingle(
                                 id="upload_form_date_id",
@@ -390,6 +379,17 @@ data_layout = html.Div([
                                 initial_visible_month=datetime.datetime.now().date(),
                                 placeholder=f"{datetime.datetime.now().date()}",
                                 display_format="YYYY-MM-DD",
+                            )
+                        ]),
+                        html.Div([
+                            html.H4("Missed"),
+                            dcc.RadioItems(
+                                id="missed_radio_id",
+                                options=[
+                                    {'label': 'Yes', 'value': 1},
+                                    {'label': 'No', 'value': 0},
+                                ],
+                                value=0,
                             )
                         ]),
                         html.Div([

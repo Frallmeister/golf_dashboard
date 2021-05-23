@@ -186,8 +186,8 @@ def parse_file_upload(contents, filename, engine, session):
     # Check that the file have the expected columns
     list_content = decoded.decode('utf-8').split('\n')
     column_names = list_content[0].strip()
-    expected_columns = ['club', 'total_distance', 'carry_distance', 'missed', 'date']
-    if not all([column in column_names for column in expected_columns]) or len(column_names.split(','))<5:
+    expected_columns = ['club', 'total_distance', 'carry_distance', 'date']
+    if not all([column in column_names for column in expected_columns]) or len(column_names.split(','))<4:
         print([column in column_names for column in expected_columns])
         print(column_names.split(','))
         return html.Div(
@@ -213,13 +213,12 @@ def parse_file_upload(contents, filename, engine, session):
             className="upload-error-message"
             )
     
-
     col_dict = dict(enumerate(column_names.split(',')))
-    nn=1
+    n_columns = len(column_names.split(','))
     for row in decoded.decode('utf-8').split('\n')[1:]:
         print(f"row = {row}")
         cells = row.strip().split(',')
-        entry = {col_dict[i]:cells[i] for i in range(5)}
+        entry = {col_dict[i]:cells[i] for i in range(n_columns)}
 
         # Create new record
         new_shot = Shots(
@@ -228,8 +227,14 @@ def parse_file_upload(contents, filename, engine, session):
             carry_distance = int(float(entry['carry_distance'])) if entry['carry_distance'] else None,
             missed = bool(int(entry['missed'])) if entry['missed'] else None,
             date = datetime.datetime.strptime(entry['date'], '%Y-%m-%d'),
+            ball_speed = int(float(entry['ball_speed'])) if entry['ball_speed'] else None,
+            launch_angle = int(float(entry['launch_angle'])) if entry['launch_angle'] else None,
+            height = int(float(entry['height'])) if entry['height'] else None,
+            impact_angle = int(float(entry['impact_angle'])) if entry['impact_angle'] else None,
+            hang_time = float(entry['hang_time']) if entry['hang_time'] else None,
+            curve = int(float(entry['curve'])) if entry['curve'] else None,
+            side = int(float(entry['side'])) if entry['side'] else None,
         )
-        nn+=1
         session.add(new_shot)
     session.commit()
 
