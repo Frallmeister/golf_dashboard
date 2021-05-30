@@ -1,3 +1,4 @@
+# from golf_dashboard.utils import small_rainbow
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -5,6 +6,77 @@ import plotly.figure_factory as ff
 import plotly.graph_objects as go
 from plotly.colors import n_colors
 import utils
+
+def plot_conf_ellipse(df, show=[], clubs=None, nvals=None, xcol='total_distance', ycol='side'):
+
+    if clubs is None:
+        clubs = df.loc[~df.side.isna(), 'club'].unique()
+
+    # Axis limits
+    xmax = df[xcol].max() + 20
+    ymax = df[ycol].max() + 10
+    xmin = 0
+    ymin = df[ycol].min() - 10
+    if xcol == 'side':
+        xmin, ymin = ymin, xmin
+
+    # Plot ellipses
+    colors = utils.small_rainbow(df, clubs)
+    colors = px.colors.qualitative.G10
+    fig = go.Figure()
+    for i, club in enumerate(clubs):
+        X, Y, x, y = utils.get_ellipse(df, club, nvals=nvals, xcol=xcol, ycol=ycol)
+        name = utils.club_enum[club]
+        fig.add_trace(
+            go.Scatter(
+                x=X,
+                y=Y,
+                name=name,
+                line=dict(color=colors[i], width=3),
+            )
+        )
+        if show:
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=y,
+                    mode='markers',
+                    marker_color=colors[i],
+                    showlegend=False,
+                )
+            )
+
+    # Axis lines
+    fig.add_trace(go.Scatter(x=[xmin,xmax], y=[0,0], mode='lines', line=dict(color='#000000', dash='dash'), showlegend=False))
+    fig.add_trace(go.Scatter(x=[0,0], y=[ymin,ymax], mode='lines', line=dict(color='#000000', dash='dash'), showlegend=False))
+    
+    fig.update_layout(
+        xaxis=dict(
+            range=[xmin, xmax],
+            tickmode='linear',
+            tick0=0,
+            dtick=10,
+        ),
+        yaxis=dict(
+            range=[ymin, ymax],
+            tickmode='linear',
+            tick0=0,
+            dtick=10,
+            autorange="reversed",
+        ),
+        margin=dict(t=60, r=0, b=10, l=0),
+        height=400,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1 
+        ),
+        xaxis_title="Total distance (m)",
+        yaxis_title="Side (m)",
+    )
+    return fig
 
 def my_dist_plot(df, range, distance='total', show_hist=False):
 
@@ -24,7 +96,7 @@ def my_dist_plot(df, range, distance='total', show_hist=False):
             tick0=0,
             dtick=5),
         height=300,
-        margin=dict(t=30, r=50, b=50, l=50),
+        margin=dict(t=70, r=50, b=50, l=50),
         # hovermode="x",
         legend=dict(
             orientation="h",
@@ -39,7 +111,7 @@ def my_dist_plot(df, range, distance='total', show_hist=False):
 
 def get_boxplot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
 
-    colors = utils.rainbow_colors(len(df.club.unique()))
+    colors = utils.big_rainbow(len(df.club.unique()))
 
     # Get an ordered list of clubs, excluding clubs with no data
     clubs = [club for club in utils.club_enum.keys() if club in df.club.unique()]
@@ -62,7 +134,7 @@ def get_boxplot_fig(df, distance='total_distance', axis='yaxis', nvals='all'):
 
     fig.update_layout(
         # height=300,
-        margin=dict(t=0, r=10, b=10, l=10),
+        margin=dict(t=30, r=10, b=10, l=10),
         legend=dict(
             orientation="h",
             yanchor="bottom",
@@ -102,7 +174,7 @@ def get_ridgeplot_fig(df, distance='total_distance', nvals='all'):
     )
 
     fig.update_layout(
-        margin=dict(t=0, r=10, b=10, l=10),
+        margin=dict(t=30, r=10, b=10, l=10),
         xaxis_showgrid=True,
         xaxis_zeroline=False,
         showlegend=False,

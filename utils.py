@@ -26,6 +26,7 @@ club_enum = {
     '56': '56 Wedge',
 }
 
+
 def get_rolling_values(df, club, column='total_distance', window_size=20, stat='stddev'):
     """
     Return list with statistic over rolling value
@@ -47,8 +48,18 @@ def get_rolling_values(df, club, column='total_distance', window_size=20, stat='
 def floor(val, n):
     return n*int(val/n)
 
-def rainbow_colors(n):
+
+def big_rainbow(n):
     return ['hsl('+str(h)+',60%'+',60%)' for h in np.linspace(0, 300, n)]
+
+
+def small_rainbow(df, clubs):
+    all_clubs = df.club.unique()
+    n = len(all_clubs)
+    all_colors = big_rainbow(n)
+    colors = [all_colors[i] for i in range(n) if all_clubs[i] in clubs]
+    return colors
+
 
 
 def get_values(array, nvals):
@@ -260,3 +271,61 @@ def parse_file_upload(contents, filename, engine, session):
             style_as_list_view=True,
         )
     ])
+
+
+def get_cov(df, club):
+    dff = df.groupby('club').get_group(club)[['total_distance', 'side']].dropna()
+    return dff.cov()
+
+
+def f_norm(M):
+    """
+    Return Frobenius norm of matrix m
+    """
+    m, n = np.shape(M)
+    M = np.reshape(M, m*n)
+    return np.sqrt(np.sum(M**2))
+
+
+def get_ellipse(df, club, nvals=None, xcol='total_distance', ycol='side', p=0.95):
+    dff = df.groupby('club').get_group(club)[['total_distance', 'side']].dropna()
+
+    if nvals is None:
+        nvals = dff.side.count()
+    elif isinstance(nvals, int):
+        nvals = min(nvals, dff.side.count())
+    else:
+        nvals = dff.side.count()
+
+    # Scatter data
+    y = dff[ycol].to_numpy()[-nvals:]
+    x = dff[xcol].to_numpy()[-nvals:]
+    x_mean, y_mean = x.mean(), y.mean()
+
+    # Covariance, eigenvalues, eigenvectors
+    cov = dff.cov().to_numpy()
+    w, v = np.linalg.eigh(cov)
+
+    # Calculate Chi square value
+    s = -2*np.log(1-p)
+
+    # Get ellipse points
+    t = np.linspace(0, 2*np.pi)
+    X = np.sqrt(w[1]*s)*np.cos(t)
+    Y = np.sqrt(w[0]*s)*np.sin(t)
+
+    # Rotation matrix
+    theta = np.arctan(v[w.argmax(), 1] / v[w.argmax(), 0])
+    R = np.array([
+        [np.cos(theta), -np.sin(theta)],
+        [np.sin(theta), np.cos(theta)]
+    ])
+
+    # Rotate elipse data
+    X_rot, Y_rot = [], []
+    for X_, Y_ in zip(X,Y):
+        x_temp, y_temp = np.dot(R, np.array([X_,Y_]))
+        X_rot.append(x_temp+x_mean)
+        Y_rot.append(y_temp+y_mean)
+
+    return (X_rot, Y_rot, x, y)

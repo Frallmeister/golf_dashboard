@@ -106,6 +106,26 @@ ul {
 }
 
 
+/* REGIONS */
+.regions {
+    grid-column: 1 / span 4;
+    /* height: 550px; */
+}
+
+.regions label {
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.regions .flex {
+    justify-content: space-between;
+}
+
+.regions .nvals .flex {
+    justify-content: flex-end;
+}
+
+
 /* BOX PLOT */
 .box-plot {
     grid-column: 1 /span 3;
@@ -128,7 +148,7 @@ ul {
 
 /* TABLE */
 .stat-table {
-    grid-column: 1 / span 2;
+    grid-column: 5 / span 2;
     /* margin-top: 20px; */
 }
 
@@ -163,6 +183,7 @@ ul {
 
 .heatplot {
     grid-column: 1 / span 2;
+    height: 500px;
 }
 
 

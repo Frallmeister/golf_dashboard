@@ -114,6 +114,60 @@ home_layout = html.Div([
     ###### MAIN
     html.Div(className="container main", children=[
         html.Div(className="grid grid-6", children=[
+
+            # CONFIDENCE REGIONS
+            html.Div(className="regions card", children=[
+                html.H3("Confidence regions"),
+                dcc.Graph(id="region_graph_id", figure=plot_conf_ellipse(df)),
+                html.Div(className="flex", children=[
+                    dcc.Checklist(
+                        id="show-scatter-option",
+                        options=[{"label": "Show data", "value": 'show'}],
+                        value=[]
+                    ),
+                    html.Div(className="club-options", children=[
+                        dcc.Checklist(
+                            id="region_clubs_options",
+                            options=[
+                                {"label": utils.club_enum[club], "value": club} for club in df.loc[~df.side.isna(), 'club'].unique()
+                                ],
+                            value=list(df.loc[~df.side.isna(), 'club'].unique()),
+                        ),
+                    ])
+                ]),
+                html.Div(className="nvals", children=[
+                    html.Div(className="flex", children=[
+                        dcc.RadioItems(
+                            id="region_nvals_options",
+                            options=[
+                                {"label": "All", "value": 0},
+                                {"label": "Last 100", "value": 100},
+                                {"label": "Last 50", "value": 50},
+                                {"label": "Last 20", "value": 20},
+                                ],
+                            value=0,
+                            labelStyle={'display': 'inline-block'},
+                        ),
+                    ])
+                ]),
+            ]),
+
+            # Table
+            html.Div(className="stat-table", children=[
+                html.Div(className="table card", children=[
+                    html.H3("Statistics"),
+                    html.Div(id="table_id"),
+                    dcc.RadioItems(
+                        id="table-total-carry",
+                        options=[
+                            {'label': 'Total distance', 'value': 'total'},
+                            {'label': 'Carry distance', 'value': 'carry'},
+                        ],
+                        value='total',
+                        labelStyle={'display': 'block'}
+                    )
+                ]),
+            ]),
             
             # BOX PLOT
             html.Div(className="box-plot card", children=[
@@ -177,22 +231,31 @@ home_layout = html.Div([
                     ),
                 ]),
             ]),
-
-            # Table
-            html.Div(className="stat-table", children=[
-                html.Div(className="table card", children=[
-                    html.H3("Statistics"),
-                    html.Div(id="table_id"),
+            
+            # HEATMAP
+            html.Div(className="heatplot card", children=[
+                html.H3("Heatmap"),
+                dcc.Graph(id="heatplot-graph"),
+                html.Div([
                     dcc.RadioItems(
-                        id="table-total-carry",
+                        id='heat-data-option',
                         options=[
-                            {'label': 'Total distance', 'value': 'total'},
-                            {'label': 'Carry distance', 'value': 'carry'},
+                            {'label': 'Std. Dev', 'value': 'stddev'},
+                            {'label': 'Median', 'value': 'median'},
+                            {'label': 'Mean', 'value': 'mean'},
                         ],
-                        value='total',
+                        value='stddev',
                         labelStyle={'display': 'block'}
-                    )
-                ]),
+                    ),
+                    dcc.Slider(
+                        id="heat-slider",
+                        min=1,
+                        max=df.groupby('club').count().total_distance.max(),
+                        marks={i: str(i) for i in range(0, 101, 5)},
+                        value=20,
+                        step=None,
+                    ),
+                ])
             ]),
             
             # DIST PLOT
@@ -225,32 +288,6 @@ home_layout = html.Div([
                             labelStyle={'display': 'block'}
                         )
                     )
-                ]),
-            ]),
-            html.Div(className="heatplot", children=[
-                html.Div(className="card", children=[
-                    html.H3("Heatmap"),
-                    dcc.Graph(id="heatplot-graph"),
-                    html.Div([
-                        dcc.RadioItems(
-                            id='heat-data-option',
-                            options=[
-                                {'label': 'Std. Dev', 'value': 'stddev'},
-                                {'label': 'Median', 'value': 'median'},
-                                {'label': 'Mean', 'value': 'mean'},
-                            ],
-                            value='stddev',
-                            labelStyle={'display': 'block'}
-                        ),
-                        dcc.Slider(
-                            id="heat-slider",
-                            min=1,
-                            max=df.groupby('club').count().total_distance.max(),
-                            marks={i: str(i) for i in range(0, 101, 5)},
-                            value=20,
-                            step=None,
-                        )
-                    ])
                 ]),
             ]),
         ]),
@@ -539,6 +576,18 @@ def plot_error_band(club, column, window_size):
 """
 CALLBACK: Home page
 """
+@app.callback(
+    Output('region_graph_id', 'figure'),
+    Input('show-scatter-option', 'value'),
+    Input('region_clubs_options', 'value'),
+    Input('region_nvals_options', 'value'),
+    )
+def region_plot(show, clubs, nvals):
+    nvals = None if nvals==0 else nvals
+    fig = plot_conf_ellipse(df, show=show, clubs=clubs, nvals=nvals)
+    return fig
+
+
 @app.callback(
     Output('table_id', 'children'),
     Input('table-total-carry', 'value'))
