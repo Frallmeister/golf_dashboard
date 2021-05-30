@@ -109,7 +109,6 @@ ul {
 /* REGIONS */
 .regions {
     grid-column: 1 / span 4;
-    /* height: 550px; */
 }
 
 .regions label {
@@ -359,6 +358,11 @@ ul {
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 1200px) {
+
+    .regions {
+        grid-column: 1 / span 6;
+    }
+
     .box-plot {
         grid-column: 1 /span 6;
     }
