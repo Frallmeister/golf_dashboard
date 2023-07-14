@@ -24,7 +24,7 @@ club_enum = {
 
 def get_db_pw():
     with open("/run/secrets/db-password", "r") as fp:
-        db_pw = fp.read()
+        db_pw = fp.read().strip()
     return db_pw
 
 
