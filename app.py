@@ -19,8 +19,9 @@ from models import Shots
 from utils import *
 from graphs import *
 
-db_pw = os.environ.get("MYSQL_ROOT_PASSWORD")
-db_uri = f"mysql+pymysql://root:{db_pw}@mysql:3306/golf_progress"
+#db_pw = os.environ.get("MYSQL_ROOT_PASSWORD")
+db_pw = get_db_pw()
+db_uri = f"mysql+pymysql://root:{db_pw}@database:3306/golf_progress"
 
 engine = db.create_engine(db_uri, echo=True)
 

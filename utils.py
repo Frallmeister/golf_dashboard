@@ -27,6 +27,12 @@ club_enum = {
 }
 
 
+def get_db_pw():
+    with open("/run/secrets/db-password", "r") as fp:
+        db_pw = fp.read()
+    return db_pw
+
+
 def get_rolling_values(df, club, column='total_distance', window_size=20, stat='stddev'):
     """
     Return list with statistic over rolling value
@@ -40,7 +46,7 @@ def get_rolling_values(df, club, column='total_distance', window_size=20, stat='
         vals = roll.median().dropna().to_list()
     else:
         return None
-    
+
     date = df.groupby('club').get_group(club).loc[window_size+1:, 'date'].to_list()
     return (vals, roll, date)
 
@@ -72,7 +78,7 @@ def get_values(array, nvals):
         n = min(len(array), 100)
     else:
         n = min(len(array), 50)
-    
+
     return array[-n:]
 
 
@@ -223,7 +229,7 @@ def parse_file_upload(contents, filename, engine, session):
             'There was an error processing this file',
             className="upload-error-message"
             )
-    
+
     col_dict = dict(enumerate(column_names.split(',')))
     n_columns = len(column_names.split(','))
     for row in decoded.decode('utf-8').split('\n')[1:]:
