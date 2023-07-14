@@ -8,3 +8,4 @@ pandas==2.0.3
 plotly==5.15.0
 PyMySQL==1.1.0
 SQLAlchemy==1.4.12
+cryptography==40.0.*
