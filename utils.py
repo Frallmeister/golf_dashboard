@@ -1,15 +1,10 @@
 import base64
 import datetime
 import io
-import csv
 
 import numpy as np
 import pandas as pd
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_table
-import plotly.express as px
+from dash import html, dash_table
 from models import Shots
 
 club_enum = {

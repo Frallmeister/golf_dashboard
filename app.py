@@ -1,21 +1,12 @@
-import os
 import datetime
-import base64
-import datetime
-import io
 
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_table
+from dash import dcc, html
 from dash.dependencies import Input, Output, State
-import plotly.express as px
-import plotly.figure_factory as ff
 import pandas as pd
-
 import sqlalchemy as db
-from models import Shots
 
+from models import Shots
 from utils import *
 from graphs import *
 
