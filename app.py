@@ -19,13 +19,9 @@ from models import Shots
 from utils import *
 from graphs import *
 
-# 
-if os.getenv("DATABASE_URL") == 'postgres://Fredrik':
-    db_pw = os.environ.get('MYSQLPW')
-    db_uri = f"mysql+pymysql://root:{db_pw}@localhost:3306/golf_progress"
-else:
-    db_uri = os.getenv("DATABASE_URL").lstrip('postgres')
-    db_uri = 'postgresql+psycopg2' + db_uri
+#db_pw = os.environ.get("MYSQL_ROOT_PASSWORD")
+db_pw = get_db_pw()
+db_uri = f"mysql+pymysql://root:{db_pw}@database:3306/golf_progress"
 
 engine = db.create_engine(db_uri, echo=True)
 
